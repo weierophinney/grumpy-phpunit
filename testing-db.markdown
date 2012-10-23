@@ -1,5 +1,143 @@
-# Testing databases 
+# Testing Databases 
 
+{ lang:php }
+    namespace Grumpy;
+
+    class Roster
+    {
+        protected $_db;
+
+        /**
+         * @param PDO $db
+         */
+        public function __construct($db)
+        {
+            $this->_db = $db;
+        }
+
+        /**
+         * Method that access the database and returns a summary of the
+         * roster for a known team with each player in the format:
+         *
+         * <shortened team name> <player last name>
+         *
+         * @param string $nickname
+         * @return array
+         */
+        public function getByTeamNickname($nickname)
+        {
+            $sql = "
+                SELECT tig_name 
+                FROM rosters
+                WHERE ibl_team = ?";
+            $sth = $this->_db->prepare($sql);
+            $sth->execute(array($nickname));
+            $rows = $sth->fetchAll();
+            
+            if (!$rows) {
+                return array();
+            }
+            
+            $rosterContents = array();
+
+            foreach ($rows as $row) {
+                array_push($rosterContents, $row['tig_name']);
+            }
+
+            return $rosterContents;
+        }
+    }  
+
+## Functional Tests vs. Unit Tests
+
+Most web applications are thin wrappers around a database, despite our
+attempts to make them sound a lot more complicated than that. If we
+have code that speaks to a database, we need to be testing it.
+
+Before we go any further, I want to make a distinction about types of
+tests. If you want to be strict about how you are defining your tests, then
+if you are writing unit tests, you should never be speaking to the database.
+
+Why? Unit test suites are meant to be testing code, not the ability of
+a database server to return results. They also need to run quickly. If your 
+test suite takes a long time to run, nobody is going to bother doing it. Who 
+wants to wait 30 minutes for your entire test suite to run? I sure don't.
+ 
+If you are testing code that does complex database queries, guess what?
+Your test will be waiting every single time you run it for that query to
+finish. Again, all those little delays in the execution time for your test
+suite add up to people becoming more and more reluctant to run the entire
+test suite. This leads to bugs crossing "units" being discovered only when 
+someone runs the whole test suite. That's not good enough. We can do better.
+
+I advocate writing as few tests as possible that speak directly to the 
+database. If you have some business logic for your application that exists
+only in an SQL query, then you probably will have to write a few tests
+that speak to the database directly.
+
+After all, I am on interested in testing to see if I can connect to my
+database properly. That sort of thing should be written into your application
+way before any business logic code gets run. Like in the bootstrap or the
+front controller of your framework-based code base.
+
+## Sandboxes
+If you are going to write tests that connect to a database, then make sure
+that you create a sandbox that the database will live in. When I say
+sandbox, I am referring to creating an environment where you can delete
+and recreate the database easily. Even better if you can automate doing it.
+
+So make sure that your application supports the ability to decide what
+database it will talk to. Set it in the bootstrap, or in your globally-available
+configuration object, or in the constructor of the god object every other object
+in your application extends itself from. I don't care, just make sure
+that you can tell your application what database to talk to.
+
+Not to beat a dead horse, but code that you can inject your dependencies
+into makes testing database-driven code a lot easier.
+
+A sample test that talks directly to the database:
+
+{: lang="php" }
+    class RosterDBTest extends PHPUnit_Framework_TestCase
+    {
+        protected $_db;
+
+        public function setUp()
+        {
+            $dsn = "pgsql:host=127.0.0.1;dbname=ibl_stats_test;user=stats;password=st@ts=Fun";
+            $this->_db = new PDO($dsn);
+        }
+
+        /**
+         * @test
+         */
+        public returnsRosterSummaryForKnownRoster()
+        {
+            $roster = new \Grumpy\Roster($this->_db);
+            $expectedRoster = array('AAA Foo', 'BBB Bar', 'ZZZ Zazz');
+            $testRoster = $roster->getByTeamNickname('TEST');
+            $this->assertEquals(
+                $expectedRoster,
+                $testRoster,
+                "Did not get expected roster when passing in known team nickname"
+            )
+        }
+    }
+
+The downside to writing tests that speak directly to a database is that you
+end up needing to constantly maintain a testing database. If you have a 
+testing environment where multiple developers share the same database, you
+run a real risk of over-writing test data or even ending up with data sets
+that bear no resemblance to data that actually exists in production.
+
+Like with any kind of testing, you are looking to compare expected results
+to the output of your code, given a known set of inputs. The only way to
+really achieve this is to either have your testing process dump the existing
+database and recreate it from or use database fixtures.
+
+In the PHPUnit world, I feel there is only one database-fixture-handling tool
+worth considering.
+ 
 ## DBUnit
 As I've said before, I am not a big fan of using database fixtures, instead
 preferring to write my code in such a way that I instead create objects
@@ -17,32 +155,32 @@ involves speaking to the database.
 
 ### Setting things up for DBUnit
 Instead of extending from the usual PHPUnit test case object, we need to use
-a different onee, and implement two required methods.
+a different one, and implement two required methods.
 
 Using our sample app, here's one way to do it.
 
 {: lang="php" }
     class RosterDBTest extends PHPUnit_Extensions_Database_Testcase
     {
+        protected $_db;
+
         public function getConnection()
         {
             $dsn = "pgsql:host=127.0.0.1;dbname=ibl_stats;user=stats;password=st@ts=Fun";
             $pdo = new PDO($dsn);
 
-            return $this->createDefaultDBConnection($pdo. $dsn);
+            return $this->createDefaultDBConnection($pdo, $dsn);
         }
 
         public funciton getDataSet()
         {
             return $this->createFlatXMLDataset(dirname(__FILE__) . '/fixtures/roster-seed.xml');
         }
+
+        // Existing tests go below
     }
 
 Yes, you are going to have to use XML. Deal with it.
-
-Unfortunately, DBUnit only really supports working with PDO connections. I did
-end up refactoring code in the sample application to use it. Luckily we don't
-need to actually alter our code in order to use the fixtures. 
 
 These two methods we've implemented make sure that any calls to a database
 being accessed via PDO will be intercepted by DBUnit.
@@ -57,18 +195,15 @@ Otherwise DBUnit won't intercept calls to the database.
 
 ### Creating a data fixture
 
-Next, we need a data fixture. Easiest way is to use an XML-based fixture file.
-Why else do you think I picked it?
-
-Here's one.
+Next, we need a data fixture. Here's one:
 
 {: lang="xml" }
    <?xml version="1.0" ?>
     <dataset>
-            <teams id="1" tig_name="FOO Bat" ibl_team="MAD" comments="Test record" status="0" item_type="2" />
-            <teams id="2" tig_name="TOR Bautista" ibl_team="MAD" comments="Joey bats!" status="1" item_type="1" />
-            <teams id="3" tig_name="MAD#1" ibl_team="MAD" status="0" item_type="0" />
-            <teams id="4" tig_name="TOR Hartjes" ibl_team="MAD" comments="Test writer" status="1" item_type="1" />
+            <rosters id="1" tig_name="FOO Bat" ibl_team="MAD" comments="Test record" status="0" item_type="2" />
+            <rosters id="2" tig_name="TOR Bautista" ibl_team="MAD" comments="Joey bats!" status="1" item_type="1" />
+            <rosters id="3" tig_name="MAD#1" ibl_team="MAD" status="0" item_type="0" />
+            <rosters id="4" tig_name="TOR Hartjes" ibl_team="MAD" comments="Test writer" status="1" item_type="1" />
     </dataset> 
 
 So why go to the trouble of doing this? Going with fixtures means that you 
@@ -77,53 +212,221 @@ without having to create an actual test database. It also means you can
 update your data fixtures as you make changes.
 
 ### Our First DBUnit Test
-That gives us some records to start. Let's add in a test to grab all the 
-players that exist in our database and verify that we've gotten all of
-them (in this case, 2 of them).
-
-{: lang="php" }
-    public function testGetExpectedBatterCount()
-    {
-        $db = DB::connect(DSN);
-        $testRosterModel = new RosterModel($db);
-        $expectedCount = 2;
-        $batters = $testRosterModel->getByNicknameAndType('MAD', 1);
-
-        $this->assertEquals(
-            $expectedCount,
-            count($batters),
-            'Did not get expected batter count for roster'
-        );
-    } 
 
 How would we write a test for a method that removes a player from a roster?
-Inside  RosterModel.php we could add this method:
+Inside  Roster  we could add this method:
 
 {: lang="php }
+    /**
+     * Method that deletes an item from our roster based on passing in a
+     * known primary ID for that record
+     *
+     * @param integer $itemId
+     * @return boolean
+     */
     public function deleteItem($itemId)
     {
-        $sql = "DELETE FROM teams WHERE id={$itemId}";
-        
-        return $this->_db->query($sql);
+        $sql = "DELETE FROM teams WHERE id = ?";
+        $sth = $this->_db->prepare($sql);
+        return $sth->execute(array($itemId));
     }
 
 The following test verifies that, yes, we can delete items from our rosters
 table.
 
 {: lang="php" }
+    /**
+     * @test
+     */
     public function testRemoveBatterFromRoster()
     {
-        $testRosterModel = new RosterModel($this->_db);
-        $expectedCount = 1;
+        $testRoster = new Roster($this->_db);
+        $expectedCount = 3;
 
-        // id 4 from our dataset is a batter
-        $testRosterModel->deleteItem(4);
-        $items = $testRosterModel->getByNicknameAndType('MAD', 1);
+        // Database fixture has 4 records in it
+        $testRoster->deleteItem(4);
+        $rosterItems = $testRoster->getByTeamNickname('MAD');
 
         $this->assertEquals(
                 $expectedCount,
                 count($items),
-                'Did not delete batter item as expected'
+                'Did not delete roster item as expected'
         );
     }
 
+## Mocking Database Connections
+
+So we have tests that are talking to the database directly and have shown
+you how to use fixtures to create known data sets. It's time to move up
+to the pure unit test level and make use of mock objects so that we don't
+have to actually talk to the database any more.
+
+
+{ lang: php }
+    /**
+     * @test
+     */
+    public function returnExpectedRosterUsingMocks()
+    {
+        $databaseResultSet = array(
+            array('tig_name' => 'AAA Foo'),
+            array('tig_name' => 'BBB Bar'),
+            array('tig_name' => 'ZZZ Zazz));
+
+First, create an example of what the database would give us back.
+
+{ lang: php }
+        $statement = $this->getMockBuilder('StdObject')
+            ->methods(array('execute', 'fetchAll'))
+            ->getMock();
+        $statement->expects($this->once())
+            ->method('execute')
+            ->will($this->returnValue(true));
+        $statement->expects($this->once())
+            ->method('fetchAll')
+            ->will($this->returnValue($databaseResultSet));
+
+Next, create a mock object to represent the object that PDO would give us
+back when we run the prepare() method.
+
+My use of StdObject is okay here because for the purposes of this particular
+test. It doesn't really matter what type of object the mocked statement is
+because we are more interested in what is returned via those two methods.
+I've used this trick a few times when dealing with mocked objects that
+need to return other objects. 
+
+{ lang: php }
+        $db = $this->getMockBuilder('PDO')
+            ->disableOriginalConstructor()
+            ->methods(array('prepare'))
+            ->getMock();
+        $db->expects($this->once())
+            ->method('prepare')
+            ->will($this->returnValue($statement));
+           
+Finally, create a mocked PDO object and tell it to return our mocked
+statement object. Note the use of disableOriginalContructor(). This is needed
+because in this particular test I only care about returning the value from
+the prepare() method. By not executing the constructor, we don't have to
+worry at all about passing in a correctly-formatted DSN like PDO would
+normally expect
+
+{ lang: php } 
+        $roster = new \Grumpy\Roster($db);
+        $expectedRoster = array('AAA Foo', 'BBB Bar', 'ZZZ Zazz');
+        $testRoster = $roster->getByTeamNickname('TEST');
+        $this->assertEquals(
+            $expectedRoster,
+            $testRoster,
+            "Did not get expected roster when passing in known team nickname"
+        )
+    }
+
+The rest of the test is the same, except we pass in our mocked PDO object
+instead of the one we created in the test's setUp() method.
+
+## Mocking vs. Fixtures
+
+Having now seen the two approaches, when should you use mocks instead of
+fixtures? In my experience, mocks are the best way to handle things if
+you are manipulating the results you get back from the database.
+
+If your code is simply returning the results straight from the database,
+I think that unit testing that code is of little value. You are better off
+investing the time writing functional tests that use fixtures or a database
+in a known state.
+
+This is also the case if you have chosen to leverage the query language
+your database uses to act as your "business logic". Let's say you want
+to have a method that returns the count of players on a roster by 
+using an aggregation function in your SQL.
+
+What should the test look like?
+
+{ lang: php }
+    /**
+     * @test
+     */
+    public function rosterHasExpectedItemCount()
+    {
+        // Assuming we are using the fixtures from before
+        $expectedRosterCount = 4;
+        $roster = new \Grumpy\Roster($this->_db);
+        $count = $roster->countItemsByTeamNickname('TEST');
+
+        $this->assertEquals(
+            $expectedRosterCount,
+            $count,
+            'countItemsByTeamNickname() did not return expected roster count'
+        );
+    }
+
+Now to add a method to our Roster class that uses SQL to give us the answer
+
+{ lang: php }
+    /**
+     * Return a count of items on a roster when you pass in the team
+     * nickname
+     *
+     * @param string $nickname
+     * @return integer
+     */
+    public function countItemsByTeamNickname($nickname)
+    {
+        $sql = "
+            SELECT COUNT(1) AS roster_count
+            FROM rosters
+            WHERE ibl_team = ?
+        ";
+        $stmt = $this->_db->prepare($sql);
+        $stmt->execute(array($nickname));
+        $result = $stmt->fetchAll();
+
+        return $result['roster_count'];
+    }
+    
+What would be the point of mocking this? It really is what I refer to as
+a "passthru" function: it's just returning the response of a single action
+without doing any manipulation to it. 
+
+This is not worth doing:
+
+{ lang: php }
+    /**
+     * @test
+     */
+    public function returnItemCountUsingMockObjects()
+    {
+        $expectedRosterCount = 4;
+        $databaseResultSet = array('roster_count' => $expectedRosterCount);
+
+        $statement = $this->getMockBuilder('StdObject')
+            ->methods(array('execute', 'fetchAll'))
+            ->getMock();
+        $statement->expects($this->once())
+            ->method('execute')
+            ->will($this->returnValue(true));
+        $statement->expects($this->once())
+            ->method('fetchAll')
+            ->will($this->returnValue($databaseResultSet));
+        
+        $db = $this->getMockBuilder('PDO')
+            ->disableOriginalConstructor()
+            ->methods(array('prepare'))
+            ->getMock();
+        $db->expects($this->once())
+            ->method('prepare')
+            ->will($this->returnValue($statement));
+        
+        $roster = new \Grumpy\Roster($db); 
+        $count = $roster->countItemsByTeamNickname('TEST');
+
+        $this->assertEquals(
+            $expectedRosterCount,
+            $count,
+            'countItemsByTeamNickname() did not return expected roster count'
+        );
+    }     
+
+Having tests are good. Having tests for the sake of writing tests just to  use
+a specific testing tool is useless.
