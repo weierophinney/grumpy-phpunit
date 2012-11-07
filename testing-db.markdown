@@ -174,13 +174,11 @@ Using our sample app, here's one way to do it.
 
         public funciton getDataSet()
         {
-            return $this->createFlatXMLDataset(dirname(__FILE__) . '/fixtures/roster-seed.xml');
+            // Load your dataset here
         }
 
         // Existing tests go below
     }
-
-Yes, you are going to have to use XML. Deal with it.
 
 These two methods we've implemented make sure that any calls to a database
 being accessed via PDO will be intercepted by DBUnit.
@@ -193,30 +191,260 @@ Also, when creating your connection in the getConnection() method, make sure
 to use the same database credentials that your application is expecting.
 Otherwise DBUnit won't intercept calls to the database.
 
-### Creating a data fixture
+### Using XML datasets
+DBUnit supports several types of XML data fixtures. For my tests that
+do use them, I like to use "flat XML datasets".
 
-Next, we need a data fixture. Here's one:
+Here's an example:
 
 {: lang="xml" }
    <?xml version="1.0" ?>
     <dataset>
             <rosters id="1" tig_name="FOO Bat" ibl_team="MAD" comments="Test record" status="0" item_type="2" />
             <rosters id="2" tig_name="TOR Bautista" ibl_team="MAD" comments="Joey bats!" status="1" item_type="1" />
-            <rosters id="3" tig_name="MAD#1" ibl_team="MAD" status="0" item_type="0" />
+            <rosters id="3" tig_name="MAD#1" ibl_team="MAD" status="0" comments="Draft Pick" item_type="0" />
             <rosters id="4" tig_name="TOR Hartjes" ibl_team="MAD" comments="Test writer" status="1" item_type="1" />
     </dataset> 
 
-So why go to the trouble of doing this? Going with fixtures means that you 
-can create datasets that are customized for the code you wish to test
-without having to create an actual test database. It also means you can
-update your data fixtures as you make changes.
+Then you load it like this:
 
-### Our First DBUnit Test
+{: lang="php" }
+    public funciton getDataSet()
+    {
+        return $this->createFlatXMLDataset(
+            dirname(__FILE__) . '/fixtures/roster-seed.xml');
+    }
 
+If you prefer to be more of a purist, you could create a structured XML dataset.
+For our sample dataset, it would look like this:
+
+{: lang="xml"}
+    <?xml version="1.0" ?>
+    <dataset>
+        <table name="rosters">
+            <column>id</column>
+            <column>tig_name</column>
+            <column>ibl_team</column>
+            <column>comments</column>
+            <column>status</column>
+            <column>item_type</column>
+            <row>
+                <value>1</value>
+                <value>FOO Bat</value>
+                <value>MAD</value>
+                <value>Test record</value>
+                <value>0</value>
+                <value>2</value>
+            </row>
+            <row>
+                <value>2</value>
+                <value>TOR Bautista</value>
+                <value>MAD</value>
+                <value>Joey bats!</value>
+                <value>1</value>
+                <value>1</value>
+            </row>
+            <row>
+                <value>3</value>
+                <value>MAD#1</value>
+                <value>MAD</value>
+                <value>Draft pick</value>
+                <value>0</value>
+                <value>0</value>
+            </row>
+            <row>
+                <value>4</value>
+                <value>TOR Hartjes</value>
+                <value>MAD</value>
+                <value>Test writer</value>
+                <value>1</value>
+                <value>1</value>
+            </row>
+        </table>
+    </dataset> 
+
+Loading that dataset is very similar:
+
+{: lang="php" }
+    public funciton getDataSet()
+    {
+        return $this->createXMLDataset(
+            dirname(__FILE__) . '/fixtures/roster-seed.xml');
+    }
+
+One of the drawbacks to using an XML dataset is that if you do have null
+values in your data, you have to put a placeholder in your dataset and
+then replace it with the desired null value.
+
+Let's say your have a dataset like this:
+
+{: lang="xml" }
+   <?xml version="1.0" ?>
+    <dataset>
+            <rosters id="1" tig_name="FOO Bat" ibl_team="MAD" comments="Test record" status="0" item_type="2" />
+            <rosters id="2" tig_name="TOR Bautista" ibl_team="MAD" comments="Joey bats!" status="1" item_type="1" />
+            <rosters id="3" tig_name="MAD#1" ibl_team="MAD" status="0" comments="###NULL###" item_type="0" />
+            <rosters id="4" tig_name="TOR Hartjes" ibl_team="MAD" comments="Test writer" status="1" item_type="1" />
+    </dataset> 
+  
+{: lang="php" }
+    public funciton getDataSet()
+    {
+        $ds = $this->createFlatXmlDataSet(dirname(__FILE__) 
+                . '/fixtures/roster-seed.xml');
+        $rds = new PHPUnit_Extensions_Database_DataSet_ReplacementDataSet($ds);
+        $rds->addFullReplacement('###NULL###', null);
+        
+        return $rds;
+    }
+
+There are also ways to merge in two different datasets, but we're getting
+to the point where I would just be cut-and-pasting the section of the
+PHPUnit manual into the book. Not really what I had in mind.
+
+### Using YAML datasets
+Don't like XML? You can always do up a data set in YAML
+
+{: lang="yaml" }
+    rosters:
+      -
+        id: 1
+        tig_name: "FOO Bat"
+        ibl_team: "MAD"
+        comments: "Test Record"
+        status: 0
+        item_type: 2
+      -
+        id: 2 
+        tig_name: "TOR Bautista"
+        ibl_team: "MAD"
+        comments: "Joey bats!"
+        status: 1 
+        item_type: 1 
+      -
+        id: 3 
+        tig_name: "MAD#1"
+        ibl_team: "MAD"
+        comments: 
+        status: 0
+        item_type: 0 
+      -
+        id: 4 
+        tig_name: "TOR Hartjes"
+        ibl_team: "MAD"
+        comments: "Test Writer"
+        status: 1 
+        item_type: 1 
+
+Then, to load that data set:
+
+{ lang:php }
+    public funciton getDataSet()
+    {
+        return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(
+            dirname(__FILE__) . '/fixtures/roster-seed.yml');
+    }
+
+### Using CSV datasets
+Sure, it's possible:
+
+{ lang="csv" }
+    id;tig_name;ibl_team;comments;status;item_type
+    1;"FOO Bat";"MAD";"Test Record";0;2
+    2;"TOR Bautista";"MAD";"Joey bats!";1,1
+    3;"MAD#1";"MAD";null;0;0
+    4;"TOR Hartjes";"MAD";"Test Writer";1;1
+
+You can load that dataset this way:
+
+{ lang="php" }
+    public funciton getDataSet()
+    {
+        $dataset = new PHPUnit_Extensions_Database_DataSet_CsvDataSet();
+        $dataset->addTable(
+            'rosters', dirname(__FILE__) . '/fixtures/roster-seed.csv');
+        );
+    }
+
+### Array-based datasets
+Sometimes you just want to hand out data as an array, and not mess with 
+any other file format:
+
+{ lang="php" }
+    public funciton getDataSet()
+    {
+        $dataset = array(
+            'rosters' => array(
+                array('id' => 1, 'tig_name' => 'Foo Bat', 'ibl_team' => 'MAD', 'comments' => 'Test Record', 'status' => 0, 'item_type' => 2),
+                array('id' => 2, 'tig_name' => 'TOR Bautista', 'ibl_team' => 'MAD', 'comments' => 'Joey bats!', 'status' => 1, 'item_type' => 1),
+                array('id' => 3, 'tig_name' => 'MAD#1', 'ibl_team' => 'MAD', 'comments' => 'Draft pick', 'status' => 0, 'item_type' => 0),
+                array('id' => 4, 'tig_name' => 'TOR Hartjes', 'ibl_team' => 'MAD', 'comments' => 'Test Writer', 'status' => 1, 'item_type' => 1)
+            )
+        )
+
+        return Grumpy_DBUnit_ArrayDataSet($dataset)
+    }
+
+The only catch is that we have to implement our own dataset code...
+
+{ lang="php" }
+    require_once 'PHPUnit/Util/Filter.php';
+
+    require_once 'PHPUnit/Extensions/Database/DataSet/AbstractDataSet.php';
+    require_once 'PHPUnit/Extensions/Database/DataSet/DefaultTableIterator.php';
+    require_once 'PHPUnit/Extensions/Database/DataSet/DefaultTable.php';
+    require_once 'PHPUnit/Extensions/Database/DataSet/DefaultTableMetaData.php';
+
+    PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
+
+    class Grumpy_DbUnit_ArrayDataSet extends PHPUnit_Extensions_Database_DataSet_AbstractDataSet
+    {
+        protected $tables = array();
+
+        public function __construct(array $data)
+        {
+            foreach ($data AS $tableName => $rows) {
+                $columns = array();
+        
+                if (isset($rows[0])) {
+                    $columns = array_keys($rows[0]);
+                }
+
+                $metaData = new PHPUnit_Extensions_Database_DataSet_DefaultTableMetaData($tableName, $columns);
+                $table = new PHPUnit_Extensions_Database_DataSet_DefaultTable($metaData);
+
+                foreach ($rows AS $row) {
+                    $table->addRow($row);
+                }
+               
+                $this->tables[$tableName] = $table;
+            }
+        }
+
+        protected function createIterator($reverse = FALSE)
+        {
+            return new PHPUnit_Extensions_Database_DataSet_DefaultTableIterator($this->tables, $reverse);
+        }
+
+        public function getTable($tableName)
+        {
+            if (!isset($this->tables[$tableName])) {
+                throw new InvalidArgumentException("$tableName is not a table in the current database.");
+            }
+
+            return $this->tables[$tableName];
+        }
+    }
+
+In my mind, the only advantage to going through the hassle of creating your
+own dataset object is that you end up with a dataset that handles missing
+values a lot easier. 
+
+## Our first DBUnit test
 How would we write a test for a method that removes a player from a roster?
 Inside  Roster  we could add this method:
 
-{: lang="php }
+{: lang="php" }
     /**
      * Method that deletes an item from our roster based on passing in a
      * known primary ID for that record
