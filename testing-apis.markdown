@@ -23,9 +23,13 @@
          */
         public function getPublicAssetCountByUser($username)
         {
-            $info = $this->grabPublicAssetsByUser($username);
-           
-            return $info['total_records'] ?: false; 
+            $response = $this->grabPublicAssetsByUser($username);
+          
+            if (isset($response['total_records'])) {
+                return $response['total_records'];
+            }
+
+            return false; 
         }
 
         /**
@@ -74,9 +78,9 @@ Given our example code, it might look something like this:
         );
     }
 
-This test is a brittle one because it relies on the API being available at the
+This test is brittle because it relies on the API being available at the
 exact time we run the test. What happens if you can't actually reach this
-API from your testing environment. This becomes important if you are 
+API from your testing environment? This becomes important if you are 
 rate-limited in your access.
 
 Also consider the situation where you access the API through one URL for your
@@ -92,35 +96,65 @@ By this I mean that if you have a library that someone (maybe even you) wrote
 to speak to an API, you really should be creating a wrapper around that 
 access. Why? For testing purposes, of course!
 
-By using a wrapper that accepts the object(s) that actually speak to the
-API, you can create mocks of them when the time comes to do your tests.
+This does mean that we will have to refactor the code so that our API class
+just returns a raw JSON response, and then we create a wrapper object that
+manipulates the API responses.
 
-Here's an example of a wrapper for our little Gimmebar API 
+Yes, this sucks. But testable code is the key.
+
+First, let's refactor our API object:
+
+{ lang: php }
+    namespace Grumpy;
+
+    class Gimmebar 
+    {
+        protected $_apiUrl;
+
+        /**
+         * @param string $apiUrl
+         */
+        public function __construct($apiUrl)
+        {
+            $this->_apiUrl = $apiUrl;
+        }
+
+        /**
+         * Grab public assets for a known user
+         *
+         * @param string $username
+         */
+        public function grabPublicAssetsByUser($username)
+        {
+            $response = file_get_contents(
+                $this->_apiUrl . "/public/assets/{$username}"
+            );
+            
+            return json_decode($response);
+        }
+    }
+
+Next, we create a wrapper object that takes the response from the API object
+and then applies some transformations to it. This way, the wrapper doesn't 
+actually need to know that it is not dealing with the real thing. It just 
+knows it's getting something that it knows how to use.
+
+To isolate code for testing purposes, we should then proceed to create a
+mock object representing the real API, and pass that into our wrapper object.
 
 { lang:php }
     namespace Grumpy;
 
-    class GimmebarWrapper
+    class GimmebarWrapper 
     {
         protected $_api;
 
         /**
-         * @param \Grumpy\Gimmebar $api
+         * @param string $apiUrl
          */
         public function __construct($api)
         {
             $this->_api = $api;
-        }
-
-        /**
-         * Get the count of public assets if you know the username
-         *
-         * @param string $username
-         * @return integer | false
-         */
-        public function getPublicAssetCountByUser($username)
-        {
-            return $this->_api->grabPublicAssetsByUser($username);
         }
 
         /**
@@ -132,14 +166,27 @@ Here's an example of a wrapper for our little Gimmebar API
         {
             return $this->_api->grabPublicAssetsByUser($username);
         }
+
+        /**
+         * Get count of assets for a known user
+         *
+         * @param string $username
+         */
+        public function grabPublicAssetCountByUser($username)
+        {
+            $response = $this->_api->grabPublicAssetsByUser($username);
+
+            if (isset($response['total_response'])) {
+                return $response['total_response'];
+            }
+
+            return false;
+        }
     }
 
-This way, the wrapper doesn't actually need to know that it is not dealing
-with the real thing. It just knows it's getting something that it knows
-how to use.
-
-To isolate code for testing purposes, we should then proceed to create a
-mock object representing the real API, and pass that into our wrapper object.
+Okay, so now that we have a wrapper that accepts our newly refactored
+API object, let's write a test to verify that stuff is working the way that
+we expect.
 
 { lang:php }
     /**
