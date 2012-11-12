@@ -1,29 +1,17 @@
 # Testing Databases 
-
-{ lang:php }
+{: lang:php }
+    <?php
     namespace Grumpy;
 
     class Roster
     {
         protected $_db;
 
-        /**
-         * @param PDO $db
-         */
         public function __construct($db)
         {
             $this->_db = $db;
         }
 
-        /**
-         * Method that access the database and returns a summary of the
-         * roster for a known team with each player in the format:
-         *
-         * <shortened team name> <player last name>
-         *
-         * @param string $nickname
-         * @return array
-         */
         public function getByTeamNickname($nickname)
         {
             $sql = "
@@ -49,7 +37,6 @@
     }  
 
 ## Functional Tests vs. Unit Tests
-
 Most web applications are thin wrappers around a database, despite our
 attempts to make them sound a lot more complicated than that. If we
 have code that speaks to a database, we need to be testing it.
@@ -108,10 +95,7 @@ A sample test that talks directly to the database:
             $this->_db = new PDO($dsn);
         }
 
-        /**
-         * @test
-         */
-        public returnsRosterSummaryForKnownRoster()
+        public testReturnsRosterSummaryForKnownRoster()
         {
             $roster = new \Grumpy\Roster($this->_db);
             $expectedRoster = array('AAA Foo', 'BBB Bar', 'ZZZ Zazz');
@@ -266,7 +250,7 @@ For our sample dataset, it would look like this:
 Loading that dataset is very similar:
 
 {: lang="php" }
-    public funciton getDataSet()
+    public function getDataSet()
     {
         return $this->createXMLDataset(
             dirname(__FILE__) . '/fixtures/roster-seed.xml');
@@ -371,7 +355,7 @@ Sometimes you just want to hand out data as an array, and not mess with
 any other file format:
 
 { lang="php" }
-    public funciton getDataSet()
+    public function getDataSet()
     {
         $dataset = array(
             'rosters' => array(
@@ -445,13 +429,6 @@ How would we write a test for a method that removes a player from a roster?
 Inside  Roster  we could add this method:
 
 {: lang="php" }
-    /**
-     * Method that deletes an item from our roster based on passing in a
-     * known primary ID for that record
-     *
-     * @param integer $itemId
-     * @return boolean
-     */
     public function deleteItem($itemId)
     {
         $sql = "DELETE FROM teams WHERE id = ?";
@@ -463,9 +440,6 @@ The following test verifies that, yes, we can delete items from our rosters
 table.
 
 {: lang="php" }
-    /**
-     * @test
-     */
     public function testRemoveBatterFromRoster()
     {
         $testRoster = new Roster($this->_db);
@@ -483,17 +457,13 @@ table.
     }
 
 ## Mocking Database Connections
-
 So we have tests that are talking to the database directly and have shown
 you how to use fixtures to create known data sets. It's time to move up
 to the pure unit test level and make use of mock objects so that we don't
 have to actually talk to the database any more.
 
 
-{ lang: php }
-    /**
-     * @test
-     */
+{: lang: php }
     public function returnExpectedRosterUsingMocks()
     {
         $databaseResultSet = array(
@@ -503,7 +473,7 @@ have to actually talk to the database any more.
 
 First, create an example of what the database would give us back.
 
-{ lang: php }
+{: lang: php }
         $statement = $this->getMockBuilder('StdObject')
             ->methods(array('execute', 'fetchAll'))
             ->getMock();
@@ -554,7 +524,6 @@ The rest of the test is the same, except we pass in our mocked PDO object
 instead of the one we created in the test's setUp() method.
 
 ## Mocking vs. Fixtures
-
 Having now seen the two approaches, when should you use mocks instead of
 fixtures? In my experience, mocks are the best way to handle things if
 you are manipulating the results you get back from the database.
@@ -656,5 +625,5 @@ This is not worth doing:
         );
     }     
 
-Having tests are good. Having tests for the sake of writing tests just to  use
+Having tests are good. Having tests for the sake of writing tests just to use
 a specific testing tool is useless.

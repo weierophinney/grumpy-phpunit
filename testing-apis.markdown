@@ -1,26 +1,18 @@
 # Testing API's
 
 { lang: php }
+    <?php
     namespace Grumpy;
 
     class Gimmebar 
     {
         protected $_apiUrl;
 
-        /**
-         * @param string $apiUrl
-         */
         public function __construct($apiUrl)
         {
             $this->_apiUrl = $apiUrl;
         }
 
-        /**
-         * Get the count of public assets if you know the username
-         *
-         * @param string $username
-         * @return integer | false
-         */
         public function getPublicAssetCountByUser($username)
         {
             $response = $this->grabPublicAssetsByUser($username);
@@ -32,11 +24,6 @@
             return false; 
         }
 
-        /**
-         * Grab public assets for a known user
-         *
-         * @param string $username
-         */
         public function grabPublicAssetsByUser($username)
         {
             $response = file_get_contents(
@@ -62,10 +49,7 @@ data from an API and then you want to transform that data somehow.
 Given our example code, it might look something like this:
 
 { lang:php }
-    /**
-     * @test
-     */
-    public function countPublicAssetsByKnownUser()
+    public function testCountPublicAssetsByKnownUser()
     {
         $apiUrl = 'https://gimmebar.com/api/v1';
         $gimmebar = new \Grumpy\Gimmebar($apiUrl);
@@ -111,19 +95,11 @@ First, let's refactor our API object:
     {
         protected $_apiUrl;
 
-        /**
-         * @param string $apiUrl
-         */
         public function __construct($apiUrl)
         {
             $this->_apiUrl = $apiUrl;
         }
 
-        /**
-         * Grab public assets for a known user
-         *
-         * @param string $username
-         */
         public function grabPublicAssetsByUser($username)
         {
             $response = file_get_contents(
@@ -149,29 +125,16 @@ mock object representing the real API, and pass that into our wrapper object.
     {
         protected $_api;
 
-        /**
-         * @param string $apiUrl
-         */
         public function __construct($api)
         {
             $this->_api = $api;
         }
 
-        /**
-         * Grab public assets for a known user
-         *
-         * @param string $username
-         */
         public function grabPublicAssetsByUser($username)
         {
             return $this->_api->grabPublicAssetsByUser($username);
         }
 
-        /**
-         * Get count of assets for a known user
-         *
-         * @param string $username
-         */
         public function grabPublicAssetCountByUser($username)
         {
             $response = $this->_api->grabPublicAssetsByUser($username);
@@ -189,12 +152,7 @@ API object, let's write a test to verify that stuff is working the way that
 we expect.
 
 { lang:php }
-    /**
-     * Test that we properly format a raw response from the GimmeBar API
-     *
-     * @test
-     */
-    public function correctlyFormatResponseFromApi()
+    public function testCorrectlyFormatResponseFromApi()
     {
         // Sample JSON response from Gimmebar API
         $apiResponse = <<EOT
@@ -229,7 +187,7 @@ we expect.
         },
         EOT; 
         
-        $api = $this->getMockBuilder('\Grumpy\GimmebarApi)
+        $api = $this->getMockBuilder('\Grumpy\GimmebarApi')
             ->methods(array('grabPublicAssetsByUser'))
             ->getMock();
         $api->expects($this->once())
@@ -246,17 +204,11 @@ handling a typical response that we from Gimmebar itself. Here's another
 example of a test using a mock object
 
 { lang: php}
-    /**
-     * Test that we extract the proper asset count from a Gimmebar API
-     * call that retrieves public assets
-     *
-     * @test
-     */
-    public function correctlyCountPublicAssets()
+    public function testCorrectlyCountPublicAssets()
     {
         // Sample JSON response from Gimmebar API
         $apiResponse = "{'total_records': 10}";
-        $api = $this->getMockBuilder('\Grumpy\GimmebarApi)
+        $api = $this->getMockBuilder('\Grumpy\GimmebarApi')
             ->methods(array('grabPublicAssetsByUser'))
             ->getMock();
         $api->expects($this->once())

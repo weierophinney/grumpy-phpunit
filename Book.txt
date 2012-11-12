@@ -1,2 +1,4 @@
+phpunit-for-grumpy-developers.markdown
+test-doubles.markdown
 testing-apis.markdown
 testing-db.markdown
