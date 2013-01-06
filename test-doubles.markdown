@@ -1,11 +1,11 @@
 # Test Doubles
 
 A key part of doing any sort of unit testing is the ability to create fake
-versions of dependencies that are required to test code. They are referred
+versions, or 'doubles', of dependencies that are required to test code. They are referred
 to by many names, names that might often confuse people who are new to
 writing unit tests.
 
-In the pure testing world, there are three types of test doubles:
+In the pure testing world, there are three [--there are five things listed though--] types of test doubles:
 
 * dummy objects
 * test stubs
@@ -40,16 +40,15 @@ using some of the methods provided by the mocking API.
         {
             if ($this->bar->getStatus() == 'merge-ready') {
                 $this->bar->merge();
-                retun true;
+                return true;
             }
             
             return false; 
         }
     }     
-The purpose of using test doubles is so that we can create versions of our
+The purpose of using test doubles is so that we can create fake versions of our
 dependencies to test specific scenarios. Sometimes we just need something
-that can stand in for a dependency and we are not worrying about faking any
-functionality. For this we can just create a dummy object.
+that can stand in for a dependency and we are not worried about faking any of its functionality. For this we can just create a dummy object.
 
 Let's say we are creating a scenario where we are testing some code that
 accepts two objects via constructor injection, but we are only testing
@@ -81,13 +80,12 @@ sure that we actually pass in objects of the correct type.
     }
 
 A totally contrived example to be sure, but why did we do the test this way?
-In our code under test we specifically are using type hinting so the code
-is expecting to be given a dependency of a specific type.
+In our code under test, class Baz, we use type hinting to ensure that the constructor
+method expects to be given dependencies of specific type.
 
-We don't need to completely mock out $foo because our test doesn't require
-a Foo object to do anything. Remember, the goal when writing tests is to 
-also minimize the amount of testing code you need to write. Don't mock
-things if they don't need to be mocked!
+We don't need to provide a full mock of $foo because our test doesn't require
+a Foo object to do anything. Remember, the goal when writing tests is
+also to keep your test code to a minimum. Don't mock things if they don't need to be mocked!
 
 ## Test Stubs
 {: lang="php" }
@@ -96,6 +94,7 @@ things if they don't need to be mocked!
     {
         $foo = $this->getMockBuilder('Foo')->getMock();
         $bar = $this->getMockBuilder('Bar')->getMock();
+
         $bar->expects($this->any())
             ->method('getStatus')
             ->will($this->returnValue('pending');
@@ -111,19 +110,19 @@ things if they don't need to be mocked!
 Okay, so there isn't anything really exciting about using these tools to
 create an empty object. The next step is to create test stubs.
 
-A test stub is a dummy object that you create and then tell it that when
+A test stub is a mock or dummy object that you create and then tell it that, when
 specific methods of that object are called, we expect to get a specific
 response back.
 
-Next, we tell the mock what method we want it to run. In this case we are
-trying to stub out the functionality of getStatus() to replace whatever it
-really wants to do.
+Next, we tell the mock what method we want it to run. In the example above we
+ stub out the functionality of Bar::getStatus() and replace it with what we
+really want it to do for the purposes of the test.
 
 A word of warning: PHPUnit cannot mock protected or private class methods.
-To do that you need to use PHP's reflection API to create a copy of the
+To do that you need to use PHP's Reflection API to create a copy of the
 object you wish to test and set those methods to be publicly visible.
 
-I realize that from a code architecture point of view protected and 
+I realize that from a code architecture point of view, protected and
 private methods have their place. As a tester, they are a pain.
 
 To end the stub method, we use will() to tell the stubbed method what we
@@ -133,9 +132,9 @@ In my experience, understanding how to stub methods in the dependencies
 of the code you are trying to test is the number one skill that good testers
 learn.
 
-You will learn to use test stubs as a "code smell", since it will reveal
+You will learn to use test stubs to identify "code smell", since they will reveal
 that you might have too many dependencies in your code, or that you have an
-object that is trying to do too much. Inception-level test stubs inside
+object that is trying to do too much. Inception-level [--some people might not 'get' the Inception reference here(?)--] test stubs inside
 test stubs inside test stubs is an indication that you need to do some
 rethinking of your architecture. 
 
@@ -160,13 +159,15 @@ rethinking of your architecture.
 
 There are a number of values that we can use for expects():
 
-* $this->any() won't care how many times you run it, and the choice of lazy 
+* $this->any() won't care how many times you run it, and is the choice of lazy
 programmers everywhere
 * $this->never() expects the method to never run
 * $this->once() expects, well, I think you can figure that one out
 * $this->atLeastOnce() is an interesting one, a good alternative to any()
+* $this->exactly(x), expects the method to be executed exactly x times [--you maybe missed this one out on purpose though?--]
+[--you should maybe include $this->at(x) in this list too, as its nice to have a full list as a quick reference point for readers(?)--]
 
-Now, we get into an interesting choice for testing some real weird scenarios.
+Now, we get into an interesting choice for testing some real weird scenarios. [--the example below doesn't seem weird though so it has me wondering 'what's weird?' and distracts me a bit--]
 There is an option called $this->at(x) where x is an integer that starts at
 0 and progresses from there.
 
@@ -215,7 +216,7 @@ a known order.
             $this->beta = $beta;
         }
 
-        public function cromulate($deltas)
+        public function cromulate($deltas)  //[--WHAT DOES CROMULATE MEAN? IS IT A REAL WORD?--]
         {
             foreach ($this->deltas as $delta) {
                 $this->beta->process($delta);
@@ -237,8 +238,8 @@ a known order.
     }
 
 Often you will want to test that a certain method in your code has been run
-a specific number of times. You can do that using the expect() method as
-part of your mock object. 
+a specific number of times. You can do that using the expects() method as
+part of your mock object. [--is this where $this->exactly(x) could be used inside expects()?--]
 
 In this code, we want to make sure that given a known number of 'deltas' that
 Beta::process() gets called the correct number of times. In this test example
