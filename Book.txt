@@ -1,4 +1,5 @@
 phpunit-for-grumpy-developers.markdown
 test-doubles.markdown
+dataproviders.markdown
 testing-apis.markdown
 testing-db.markdown
