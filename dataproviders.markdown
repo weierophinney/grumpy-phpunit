@@ -1,5 +1,5 @@
 # Data Providers
-{ lang: php}
+{: lang="php" }
     <?php
 
     function dataProvider()
@@ -27,7 +27,7 @@ because it touches on a lot of really elementary basics of programming.
 ## Look at all those tests
 If you didn't know about data providers, what might your tests look like?
  
-{ lang: php}
+{: lang="php" }
     <?php
     class FizzBuzzTest extends PHPUnit_Framework_Testcase
     {
@@ -82,7 +82,8 @@ array of results, with each result set being an array itself. Through
 some magic internal work, PHPUnit converts the result set you are returning
 into parameters which your test method needs to accept.
 
-{ lang: php}
+{: lang="php" }
+    <?php
     public function fizzBuzzProvider()
     {
         return array(
@@ -101,7 +102,8 @@ To use the data provider, we have to add an annotation to the docblock
 preceding our test so that PHPUnit knows to use it. Give it the name of
 the data provider method.
 
-{ lang: php}
+{: lang="php" }
+    <?php
     /**
      * Test for our FizzBuzz object
      *
@@ -124,7 +126,8 @@ Don't feel like you can only have really simple data providers. All you need
 to do is return an array of arrays, with each result set matching the
 parameters that your testing method is expecting. Here's an example
 
-{ lang: php }
+{: lang="php" }
+    <?php
     public function complexProvider()
     {
         // Read in some data from a CSV file
