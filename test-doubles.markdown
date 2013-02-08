@@ -106,6 +106,7 @@ things if they don't need to be mocked!
             $testResult, 
             'Bar with pending status should not be merged'
         );
+	}
 
 Okay, so there isn't anything really exciting about using these tools to
 create an empty object. The next step is to create test stubs.
@@ -140,6 +141,7 @@ rethinking of your architecture.
 
 ### Expectations during execution
 {: lang="php" }
+	<?php
     public function testShowingUsingAt()
     {
         $foo = $this->getMockBuilder('stdClass')->getMock();
@@ -330,6 +332,7 @@ If you are using PHPUnit 3.6 or newer, you can use a helper
 that will give you a test double that uses the trait:
 
 {: lang="php" }
+	<?php
     trait Registry 
     {
         protected $_values = array();
