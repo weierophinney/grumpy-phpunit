@@ -89,6 +89,7 @@ Yes, this sucks. But testable code is the key.
 First, let's refactor our API object:
 
 {: lang="php" }
+    <?php
     namespace Grumpy;
 
     class Gimmebar 

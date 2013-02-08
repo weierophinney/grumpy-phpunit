@@ -145,6 +145,7 @@ a different one, and implement two required methods.
 Using our sample app, here's one way to do it.
 
 {: lang="php" }
+    <?php
     class RosterDBTest extends PHPUnit_Extensions_Database_Testcase
     {
         protected $_db;
@@ -194,6 +195,7 @@ Here's an example:
 Then you load it like this:
 
 {: lang="php" }
+    <?php
     public funciton getDataSet()
     {
         return $this->createFlatXMLDataset(
@@ -388,7 +390,8 @@ The only catch is that we have to implement our own dataset code...
 
     PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
-    class Grumpy_DbUnit_ArrayDataSet extends PHPUnit_Extensions_Database_DataSet_AbstractDataSet
+    class Grumpy_DbUnit_ArrayDataSet 
+        extends PHPUnit_Extensions_Database_DataSet_AbstractDataSet
     {
         protected $tables = array();
 
@@ -472,7 +475,7 @@ to the pure unit test level and make use of mock objects so that we don't
 have to actually talk to the database any more.
 
 
-{: lang: php }
+{: lang="php" }
     <?php
     public function returnExpectedRosterUsingMocks()
     {
@@ -480,10 +483,11 @@ have to actually talk to the database any more.
             array('tig_name' => 'AAA Foo'),
             array('tig_name' => 'BBB Bar'),
             array('tig_name' => 'ZZZ Zazz));
+    }
 
 First, create an example of what the database would give us back.
 
-{: lang: php }
+{: lang="php" }
     <?php
     $statement = $this->getMockBuilder('StdObject')
         ->setMethods(array('execute', 'fetchAll'))
