@@ -1,6 +1,5 @@
 # Testing Databases 
-
-{: lang:php }
+{: lang="php" }
     <?php
     namespace Grumpy;
 
@@ -86,6 +85,7 @@ into makes testing database-driven code a lot easier.
 A sample test that talks directly to the database:
 
 {: lang="php" }
+    <?php
     class RosterDBTest extends PHPUnit_Framework_TestCase
     {
         protected $_db;
@@ -251,6 +251,7 @@ For our sample dataset, it would look like this:
 Loading that dataset is very similar:
 
 {: lang="php" }
+    <?php
     public function getDataSet()
     {
         return $this->createXMLDataset(
@@ -273,6 +274,7 @@ Let's say your have a dataset like this:
     </dataset> 
   
 {: lang="php" }
+    <?php
     public funciton getDataSet()
     {
         $ds = $this->createFlatXmlDataSet(dirname(__FILE__) 
@@ -323,7 +325,8 @@ Don't like XML? You can always do up a data set in YAML
 
 Then, to load that data set:
 
-{ lang:php }
+{: lang="php" }
+    <?php
     public funciton getDataSet()
     {
         return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(
@@ -333,7 +336,7 @@ Then, to load that data set:
 ### Using CSV datasets
 Sure, it's possible:
 
-{ lang="csv" }
+{: lang="csv" }
     id;tig_name;ibl_team;comments;status;item_type
     1;"FOO Bat";"MAD";"Test Record";0;2
     2;"TOR Bautista";"MAD";"Joey bats!";1,1
@@ -342,7 +345,8 @@ Sure, it's possible:
 
 You can load that dataset this way:
 
-{ lang="php" }
+{: lang="php" }
+    <?php
     public funciton getDataSet()
     {
         $dataset = new PHPUnit_Extensions_Database_DataSet_CsvDataSet();
@@ -355,7 +359,8 @@ You can load that dataset this way:
 Sometimes you just want to hand out data as an array, and not mess with 
 any other file format:
 
-{ lang="php" }
+{: lang="php" }
+    <?php
     public function getDataSet()
     {
         $dataset = array(
@@ -372,7 +377,8 @@ any other file format:
 
 The only catch is that we have to implement our own dataset code...
 
-{ lang="php" }
+{: lang="php" }
+    <?php
     require_once 'PHPUnit/Util/Filter.php';
 
     require_once 'PHPUnit/Extensions/Database/DataSet/AbstractDataSet.php';
@@ -430,6 +436,7 @@ How would we write a test for a method that removes a player from a roster?
 Inside  Roster  we could add this method:
 
 {: lang="php" }
+    <?php
     public function deleteItem($itemId)
     {
         $sql = "DELETE FROM teams WHERE id = ?";
@@ -441,6 +448,7 @@ The following test verifies that, yes, we can delete items from our rosters
 table.
 
 {: lang="php" }
+    <?php
     public function testRemoveBatterFromRoster()
     {
         $testRoster = new Roster($this->_db);
@@ -465,6 +473,7 @@ have to actually talk to the database any more.
 
 
 {: lang: php }
+    <?php
     public function returnExpectedRosterUsingMocks()
     {
         $databaseResultSet = array(
@@ -475,15 +484,16 @@ have to actually talk to the database any more.
 First, create an example of what the database would give us back.
 
 {: lang: php }
-        $statement = $this->getMockBuilder('StdObject')
-            ->methods(array('execute', 'fetchAll'))
-            ->getMock();
-        $statement->expects($this->once())
-            ->method('execute')
-            ->will($this->returnValue(true));
-        $statement->expects($this->once())
-            ->method('fetchAll')
-            ->will($this->returnValue($databaseResultSet));
+    <?php
+    $statement = $this->getMockBuilder('StdObject')
+        ->setMethods(array('execute', 'fetchAll'))
+        ->getMock();
+    $statement->expects($this->once())
+        ->method('execute')
+        ->will($this->returnValue(true));
+    $statement->expects($this->once())
+        ->method('fetchAll')
+        ->will($this->returnValue($databaseResultSet));
 
 Next, create a mock object to represent the object that PDO would give us
 back when we run the prepare() method.
@@ -494,15 +504,16 @@ because we are more interested in what is returned via those two methods.
 I've used this trick a few times when dealing with mocked objects that
 need to return other objects. 
 
-{ lang: php }
-        $db = $this->getMockBuilder('PDO')
-            ->disableOriginalConstructor()
-            ->methods(array('prepare'))
-            ->getMock();
-        $db->expects($this->once())
-            ->method('prepare')
-            ->will($this->returnValue($statement));
-           
+{: lang="php" }
+    <?php
+    $db = $this->getMockBuilder('PDO')
+        ->disableOriginalConstructor()
+        ->setMethods(array('prepare'))
+        ->getMock();
+    $db->expects($this->once())
+        ->method('prepare')
+        ->will($this->returnValue($statement));
+       
 Finally, create a mocked PDO object and tell it to return our mocked
 statement object. Note the use of disableOriginalContructor(). This is needed
 because in this particular test I only care about returning the value from
@@ -510,16 +521,17 @@ the prepare() method. By not executing the constructor, we don't have to
 worry at all about passing in a correctly-formatted DSN like PDO would
 normally expect
 
-{ lang: php } 
-        $roster = new \Grumpy\Roster($db);
-        $expectedRoster = array('AAA Foo', 'BBB Bar', 'ZZZ Zazz');
-        $testRoster = $roster->getByTeamNickname('TEST');
-        $this->assertEquals(
-            $expectedRoster,
-            $testRoster,
-            "Did not get expected roster when passing in known team nickname"
-        )
-    }
+{: lang="php" } 
+    <?php
+    $roster = new \Grumpy\Roster($db);
+    $expectedRoster = array('AAA Foo', 'BBB Bar', 'ZZZ Zazz');
+    $testRoster = $roster->getByTeamNickname('TEST');
+    $this->assertEquals(
+        $expectedRoster,
+        $testRoster,
+        "Did not get expected roster when passing in known team nickname"
+    )
+}
 
 The rest of the test is the same, except we pass in our mocked PDO object
 instead of the one we created in the test's setUp() method.
@@ -541,7 +553,8 @@ using an aggregation function in your SQL.
 
 What should the test look like?
 
-{ lang: php }
+{: lang="php" }
+    <?php
     /**
      * @test
      */
@@ -561,7 +574,8 @@ What should the test look like?
 
 Now to add a method to our Roster class that uses SQL to give us the answer
 
-{ lang: php }
+{: lang="php" }
+    <?php
     /**
      * Return a count of items on a roster when you pass in the team
      * nickname
@@ -589,7 +603,8 @@ without doing any manipulation to it.
 
 This is not worth doing:
 
-{ lang: php }
+{: lang="php" }
+    <?php
     /**
      * @test
      */
@@ -599,7 +614,7 @@ This is not worth doing:
         $databaseResultSet = array('roster_count' => $expectedRosterCount);
 
         $statement = $this->getMockBuilder('StdObject')
-            ->methods(array('execute', 'fetchAll'))
+            ->setMethods(array('execute', 'fetchAll'))
             ->getMock();
         $statement->expects($this->once())
             ->method('execute')
@@ -610,7 +625,7 @@ This is not worth doing:
         
         $db = $this->getMockBuilder('PDO')
             ->disableOriginalConstructor()
-            ->methods(array('prepare'))
+            ->setMethods(array('prepare'))
             ->getMock();
         $db->expects($this->once())
             ->method('prepare')

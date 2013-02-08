@@ -1,6 +1,5 @@
 # Testing Exceptions
-
-{ lang: php }
+{: lang="php" }
     <?php
     class Foo
     {
@@ -30,7 +29,7 @@ PHPUnit relies on the use of annotations to indicate what exceptions it
 is expecting to encounter when testing code. Let's create a test for our
 code sample above.
 
-{ lang: php }
+{: lang="php" }
     <?php
     /**
      * Test that makes sure we are correctly triggering an

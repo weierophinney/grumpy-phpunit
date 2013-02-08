@@ -1,6 +1,5 @@
 # Testing API's
-
-{ lang: php }
+{ : lang="php" }
     <?php
     namespace Grumpy;
 
@@ -48,7 +47,8 @@ The most common test that people are looking to do is one where you get
 data from an API and then you want to transform that data somehow.
 Given our example code, it might look something like this:
 
-{ lang:php }
+{ : lang="php" }
+    <?php
     public function testCountPublicAssetsByKnownUser()
     {
         $apiUrl = 'https://gimmebar.com/api/v1';
@@ -88,7 +88,7 @@ Yes, this sucks. But testable code is the key.
 
 First, let's refactor our API object:
 
-{ lang: php }
+{: lang="php" }
     namespace Grumpy;
 
     class Gimmebar 
@@ -118,7 +118,8 @@ knows it's getting something that it knows how to use.
 To isolate code for testing purposes, we should then proceed to create a
 mock object representing the real API, and pass that into our wrapper object.
 
-{ lang:php }
+{: lang="php" }
+    <?php
     namespace Grumpy;
 
     class GimmebarWrapper 
@@ -151,7 +152,8 @@ Okay, so now that we have a wrapper that accepts our newly refactored
 API object, let's write a test to verify that stuff is working the way that
 we expect.
 
-{ lang:php }
+{: lang="php" }
+    <?php
     public function testCorrectlyFormatResponseFromApi()
     {
         // Sample JSON response from Gimmebar API
@@ -188,7 +190,7 @@ we expect.
         EOT; 
         
         $api = $this->getMockBuilder('\Grumpy\GimmebarApi')
-            ->methods(array('grabPublicAssetsByUser'))
+            ->setMethods(array('grabPublicAssetsByUser'))
             ->getMock();
         $api->expects($this->once())
             ->method('grabPublicAssetsByUser')
@@ -203,13 +205,14 @@ In this test case we are making sure that the Gimmebar wrapper is correctly
 handling a typical response that we from Gimmebar itself. Here's another 
 example of a test using a mock object
 
-{ lang: php}
+{: lang="php" }
+    <?php
     public function testCorrectlyCountPublicAssets()
     {
         // Sample JSON response from Gimmebar API
         $apiResponse = "{'total_records': 10}";
         $api = $this->getMockBuilder('\Grumpy\GimmebarApi')
-            ->methods(array('grabPublicAssetsByUser'))
+            ->setMethods(array('grabPublicAssetsByUser'))
             ->getMock();
         $api->expects($this->once())
             ->method('grabPublicAssetsByUser')

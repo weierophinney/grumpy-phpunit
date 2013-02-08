@@ -1,5 +1,4 @@
 # Test Doubles
-
 A key part of doing any sort of unit testing is the ability to create fake
 versions of dependencies that are required to test code. They are referred
 to by many names, names that might often confuse people who are new to
@@ -20,7 +19,6 @@ using some of the methods provided by the mocking API.
 ## Dummy Objects
 {: lang="php" }
     <?php
-
     class Baz
     {
         public $foo;
@@ -45,7 +43,8 @@ using some of the methods provided by the mocking API.
             
             return false; 
         }
-    }     
+    } 
+
 The purpose of using test doubles is so that we can create versions of our
 dependencies to test specific scenarios. Sometimes we just need something
 that can stand in for a dependency and we are not worrying about faking any
@@ -84,8 +83,8 @@ A totally contrived example to be sure, but why did we do the test this way?
 In our code under test we specifically are using type hinting so the code
 is expecting to be given a dependency of a specific type.
 
-We don't need to completely mock out $foo because our test doesn't require
-a Foo object to do anything. Remember, the goal when writing tests is to 
+We don't need to completely mock out *$foo* because our test doesn't require
+a *Foo*  object to do anything. Remember, the goal when writing tests is to 
 also minimize the amount of testing code you need to write. Don't mock
 things if they don't need to be mocked!
 
@@ -116,7 +115,7 @@ specific methods of that object are called, we expect to get a specific
 response back.
 
 Next, we tell the mock what method we want it to run. In this case we are
-trying to stub out the functionality of getStatus() to replace whatever it
+trying to stub out the functionality of *getStatus()* to replace whatever it
 really wants to do.
 
 A word of warning: PHPUnit cannot mock protected or private class methods.
@@ -160,11 +159,11 @@ rethinking of your architecture.
 
 There are a number of values that we can use for expects():
 
-* $this->any() won't care how many times you run it, and the choice of lazy 
+* *$this->any()* won't care how many times you run it, and the choice of lazy 
 programmers everywhere
-* $this->never() expects the method to never run
-* $this->once() expects, well, I think you can figure that one out
-* $this->atLeastOnce() is an interesting one, a good alternative to any()
+* *$this->never()* expects the method to never run
+* *$this->once()* expects, well, I think you can figure that one out
+* *$this->atLeastOnce()* is an interesting one, a good alternative to any()
 
 Now, we get into an interesting choice for testing some real weird scenarios.
 There is an option called $this->at(x) where x is an integer that starts at
@@ -198,10 +197,86 @@ There is an option called $this->at(x) where x is an integer that starts at
     }
 
 You can also write tests where you can mock an object that will return
-different results based on specific inputs, using the with() method.
+different results based on specific inputs, using the *with()* method.
 This is useful if you are testing some code that uses a dependency in a
 loop and wish to verify that a certain series of values are returned in
 a known order.
+
+### Mocking method calls with multiple parameters
+If you need to mock a method that accepts multiple parameters, you can
+specify that inside the with() method
+
+{: lang="php"}
+    <?php
+    // Method is fooSum($startRow, $endRow)
+    $foo = $this->getMockBuilder('MathStuff')->getMock();
+    $startRow = 1;
+    $endRow = 10;
+    $foo->expects($this->once())
+        ->method('fooSum')
+        ->with($startRow, $endRow)
+        ->will($this->returnValue(55));
+
+### Testing protected and private methods of objects
+I will be up front: I am not an advocate of writing tests for
+protected and private class methods. In most cases, when you
+write tests for public methods, you will end up testing
+private and protected methods that it calls.
+
+Of course, if these private and protected methods have
+side effects, you will probably need to test them just
+to make sure they are tested properly.
+
+In PHP, the only way to do this easily is by using
+the Reflection API that is available in PHP 5.
+
+Here is a very contrived example:
+
+{: lang="php"}
+    <?php
+    class Foo
+    {
+        protected $_message;
+
+        protected function _bar($environment)
+        {
+            if ($environment == 'dev') {
+                return 'CANDY BAR';
+            }
+            
+            return "PROTECTED BAR";
+        }
+    }
+
+To test it, we unleash the power of reflection.
+
+{: lang="php"}
+    <?php
+    class FooTest extends PHPUnit_Framework_Testcase
+    {
+        public function testProtectedBar()
+        {
+            $testFoo = new Foo();
+            $expectedMessage = 'PROTECTED BAR';
+            $reflectedFoo = new ReflectionMethod($testFoo, '_bar');
+            $reflectedFoo->setAccessible(true);
+            $reflectedFoo->invoke($testFoo);
+            $message = PHPUnit_Framework_Assert::readAttribute(
+                $testFoo, '_message'
+            );
+
+            $this->assertEquals(
+                $expectedMessage,
+                $message,
+                'Did not get expected message'
+            )
+        }
+    }
+
+### Testing Private And Protected Attributes
+Same sort of thing applied if we want to write any tests
+where we are manipulating private or protected attributes.
+
 
 ## Test Spies
 {: lang="php" }
@@ -243,3 +318,50 @@ part of your mock object.
 In this code, we want to make sure that given a known number of 'deltas' that
 Beta::process() gets called the correct number of times. In this test example
 the test case would fail if Beta::process is not run 3 times. 
+
+## More Object Testing Tricks
+
+### Testing Traits
+If you are using PHP 5.4 and want to compose objects using traits,
+you have two options. You can test object that use traits, and then
+test the functionality that the traits add.
+
+If you are using PHPUnit 3.6 or newer, you can use a helper
+that will give you a test double that uses the trait:
+
+{: lang="php" }
+    trait Registry 
+    {
+        protected $_values = array();
+
+        public function set($key, $value)
+        {
+            $this->values[$key] = $value;
+        }
+
+        public function get($key)
+        {
+            if (!isset($this->_values[$key'])) {
+                return false;
+            }
+
+            return $this->_values[$key];
+        }
+    }
+
+Okay, now we test it
+
+{: lang="php" }
+    <?php
+    class RegistryTest extends PHPUnit_Framework_TestCase
+    {
+        public function testReturnsFalseForUnknownKey()
+        {
+            $registry = $this->getObjectForTrait('Registry');
+            $response = $registry->get('foo');
+            $this->assertFalse(
+                $response,
+                "Did not get expected false result for unknown key"
+            );
+        }
+    }

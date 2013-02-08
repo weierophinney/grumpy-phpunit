@@ -1,5 +1,4 @@
 # Data Providers
-
 { lang: php}
     <?php
 
@@ -12,7 +11,6 @@
     }
 
 ## Why you should use data providers
-
 One of your main goals should always be to write the bare minimum amount of
 code in order to solve a particular problem you are facing. This is no different
 when it comes to tests, which are really nothing more than code.
@@ -27,11 +25,10 @@ as part of an interview. In my opinion it is a good problem to ask about
 because it touches on a lot of really elementary basics of programming.
 
 ## Look at all those tests
-
 If you didn't know about data providers, what might your tests look like?
  
 { lang: php}
-
+    <?php
     class FizzBuzzTest extends PHPUnit_Framework_Testcase
     {
         public function setup()

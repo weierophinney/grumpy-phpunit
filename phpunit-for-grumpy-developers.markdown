@@ -29,7 +29,7 @@ you create a JSON file that tells Composer where you want it installed.
 Here's a version so that it will install it globally for you in a specified
 directory.
 
-{: lang="json" }
+{lang : json}
     {
         "name": "phpunit",
         "description": "PHPUnit",
@@ -47,7 +47,7 @@ some reason they won't work you can just add them to composer.json.
 If you wish to have PHPUnit as an actual dependency for your application, 
 you can create a much simplified version of that JSON file
 
-{: lang="json" }
+{lang: "json" 
     {
         "require-dev": {
             "phpunit/phpunit": "3.7.*"
@@ -85,7 +85,8 @@ In any case, consult the documentation for PHPUnit to see all the dependencies
 and add-ons that are available.
 
 ## Minimum Viable Test Class 
-{: lang="php" }
+{lang : php }
+    <?php
     class GrumpyTest extends PHPUnit_Framework_TestCase
     {
         public function testMinimumViableTest()
@@ -155,14 +156,12 @@ compatibility with existing tools. Here are the ones that I have found
 useful:
 
 ### Logging Options
-If you are using PHPUnit in conjunction with a Continuous Integration
+If you are using PHPUnit in conjunction with a continuous integration
 solution like [Jenkins-CI](http://www.jenkins-ci.org) then you should use 
 the *--log-junit optional/path/to/file* switch. 
 
 By spitting out logs in JUnit's XML format you make it easier for plugins
 for Jenkins to grab that data and do something useful with it.
-
-@TODO -> add snippet of log file
 
 ### Code Coverage Options
 Code coverage reports are a tool that you can use to figure out how much
@@ -261,6 +260,63 @@ in the configuration file so you don't forget to do it yourself. Remember,
 computers are awesome at doing what you tell them to over and over again.
 Humans, not so much.
 
+### Process Isolation
+If you've worked with PHP for any length of time, you become aware of
+the fact that there is global state, and that the state is preserved for
+the entire length of the request. In other words, if you create an 
+object at any point in the request, it will be available to any other
+code that resides in the same scope.
+
+This can sometimes be a problem when running tests because you don't
+want state leaking from one test to another. Things could get unpredictable
+if you modify an object in one test and then a subsequent test is
+expecting that object to be unmodified.
+
+More commonly I have seen process isolation in PHPUnit used while
+running integration tests. Why? Integration tests usually consist of
+manipulating real objects, not test doubles, so you must pay close
+attention to their state.
+
+To insist on process isolation for all your tests, it's as simple as passing
+*--process-isolation* as a CLI option, or setting *provessIsolation="true"* in
+your XML configuration file. This means, by default, every single test will
+be run in it's own PHP process. This will mean your test suite will take a
+lot longer, so keep this in mind if you decide to do it.
+
+If you only have some tests that need to be isolated, it's a little bit
+tricker. First you need to do is add the annotation *@runInSeparateProcess*
+to the docblock for your test that needs isolation. However, once you've
+set that value, it will be preserved for all following tests.
+
+To fix this, you would need to override the *run()* method in *PHPUnit_Framework_TestCase*
+to explicitly turn the preservation of global state back off. Here's
+an example.
+
+{lang : php }
+    <?php
+    class GrumpyIsolatedTests extends PHPUnit_Framework_TestCase
+    {
+        public function run(PHPUnit_Framework_TestResult $result = NULL)
+        {
+            $this->setPreserveGlobalState(true);
+            
+            return parent::run($result);
+        }
+    }
+
+Given that you have to do this bit of hackery, I would recommend overriding
+the *run()* method in all your tests to explicitly set *preserveGlobalState*
+to false. Such is the price of having selected process isolation.
+
+Another potential solution is to use separate PHPUnit configuration
+files that set process isolation as a run-time option and then
+white list only the directories containing the tests that need
+to be run in isolation. Conversely, make sure that your non-process-isolated
+configuration file doesn't include any tests that require isolation
+to work correctly.
+
+My experience has been that the dual configuration file method
+is the best way to go. 
 
 ## Organizing Your Tests
 
