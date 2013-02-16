@@ -22,6 +22,7 @@ using some of the methods provided by the mocking API.
     class Baz
     {
         public $foo;
+        public $bar;
 
         public function __construct(Foo $foo, Bar $bar)
         {
