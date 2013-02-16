@@ -96,7 +96,7 @@ A sample test that talks directly to the database:
             $this->_db = new PDO($dsn);
         }
 
-        public testReturnsRosterSummaryForKnownRoster()
+        public function testReturnsRosterSummaryForKnownRoster()
         {
             $roster = new \Grumpy\Roster($this->_db);
             $expectedRoster = array('AAA Foo', 'BBB Bar', 'ZZZ Zazz');
@@ -105,7 +105,7 @@ A sample test that talks directly to the database:
                 $expectedRoster,
                 $testRoster,
                 "Did not get expected roster when passing in known team nickname"
-            )
+            );
         }
     }
 
