@@ -256,6 +256,9 @@ Here is a very contrived example:
         }
     }
 
+[TechEdit - Would you rather have this follow PSR where protected/Private
+    methods don't use the _ notation anymore?]
+
 To test it, we unleash the power of reflection.
 
 {: lang="php"}
