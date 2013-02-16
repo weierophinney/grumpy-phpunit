@@ -42,7 +42,7 @@ Here's an example:
     $sql = "SELECT * FROM widgets WHERE type = 'standard'";
     $stmnt = $dbh->prepare($sql);
     $stmnt->execute();
-    $results = $stmnt->fetchAll();
+    $results = $stmnt->fetchAll(PDO::FETCH_ASSOC);
     $collection = array();
 
     foreach ($results as $result) {
