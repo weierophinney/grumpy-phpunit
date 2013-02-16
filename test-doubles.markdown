@@ -353,7 +353,7 @@ that will give you a test double that uses the trait:
 
         public function get($key)
         {
-            if (!isset($this->_values[$key'])) {
+            if (!isset($this->_values[$key])) {
                 return false;
             }
 
