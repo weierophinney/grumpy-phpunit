@@ -20,7 +20,7 @@
                 WHERE ibl_team = ?";
             $sth = $this->_db->prepare($sql);
             $sth->execute(array($nickname));
-            $rows = $sth->fetchAll();
+            $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
             
             if (!$rows) {
                 return array();
