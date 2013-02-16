@@ -3,9 +3,11 @@
     <?php
     class Foo
     {
+        protected $_badWordsArray;
+
         public function __construct($badWordsArray)
         {
-            $this->_badWordsLIst = $badWordsArray;
+            $this->_badWordsArray = $badWordsArray;
         }
         
         public function censorCheck($word)
@@ -17,6 +19,8 @@
             return true;
         }
     }
+
+[TechEdit - Keep _ for protected/private stuff or change?]
 
 If you're into writing what I refer to as "modern PHP", you are definitely
 going to want to be using exceptions to trap all your non-fatal errors. 
@@ -47,7 +51,5 @@ code sample above.
 
 When this test gets run, it will expect that in the course of executing
 your code an exception of the type FooException will be thrown.
-
-
 
 
