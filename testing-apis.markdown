@@ -109,7 +109,7 @@ First, let's refactor our API object:
                 $this->_apiUrl . "/public/assets/{$username}"
             );
             
-            return json_decode($response);
+            return json_decode($response, true);
         }
     }
 
