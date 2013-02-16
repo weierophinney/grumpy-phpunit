@@ -249,10 +249,10 @@ Here is a very contrived example:
         protected function _bar($environment)
         {
             if ($environment == 'dev') {
-                return 'CANDY BAR';
+                $this->_message = 'CANDY BAR';
             }
             
-            return "PROTECTED BAR";
+            $this->_message = "PROTECTED BAR";
         }
     }
 
@@ -263,7 +263,7 @@ To test it, we unleash the power of reflection.
 
 {: lang="php"}
     <?php
-    class FooTest extends PHPUnit_Framework_Testcase
+    class FooTest extends PHPUnit_Framework_TestCase
     {
         public function testProtectedBar()
         {
@@ -271,7 +271,7 @@ To test it, we unleash the power of reflection.
             $expectedMessage = 'PROTECTED BAR';
             $reflectedFoo = new ReflectionMethod($testFoo, '_bar');
             $reflectedFoo->setAccessible(true);
-            $reflectedFoo->invoke($testFoo);
+            $reflectedFoo->invoke($testFoo, 'production');
             $message = PHPUnit_Framework_Assert::readAttribute(
                 $testFoo, '_message'
             );
@@ -280,7 +280,7 @@ To test it, we unleash the power of reflection.
                 $expectedMessage,
                 $message,
                 'Did not get expected message'
-            )
+            );
         }
     }
 
