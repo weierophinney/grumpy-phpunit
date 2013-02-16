@@ -42,7 +42,7 @@ Here's an example:
     $sql = "SELECT * FROM widgets WHERE type = 'standard'";
     $stmnt = $dbh->prepare($sql);
     $stmnt->execute();
-    $results = $stmnt->fetchAll();
+    $results = $stmnt->fetchAll(PDO::FETCH_ASSOC);
     $collection = array();
 
     foreach ($results as $result) {
@@ -73,7 +73,7 @@ When you're ready to use it in your test:
 
     $this->assertTrue(
         count($collection) > 8,
-        "Did not have at least 8 widgets in our collection
+        "Did not have at least 8 widgets in our collection"
     );
     $this->assertEquals(
         $expectedCount,
