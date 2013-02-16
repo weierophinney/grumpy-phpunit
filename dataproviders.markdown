@@ -91,7 +91,7 @@ into parameters which your test method needs to accept.
             array(3, 'Fizz'),
             array(5, 'Buzz'),
             array(15, 'FizzBuzz')
-        )
+        );
     }
 
 The function name for the provider doesn't matter, but use some common
