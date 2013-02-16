@@ -22,6 +22,7 @@ using some of the methods provided by the mocking API.
     class Baz
     {
         public $foo;
+        public $bar;
 
         public function __construct(Foo $foo, Bar $bar)
         {
@@ -38,7 +39,7 @@ using some of the methods provided by the mocking API.
         {
             if ($this->bar->getStatus() == 'merge-ready') {
                 $this->bar->merge();
-                retun true;
+                return true;
             }
             
             return false; 
@@ -97,7 +98,7 @@ things if they don't need to be mocked!
         $bar = $this->getMockBuilder('Bar')->getMock();
         $bar->expects($this->any())
             ->method('getStatus')
-            ->will($this->returnValue('pending');
+            ->will($this->returnValue('pending'));
         
         $baz = new Baz($foo, $bar);
         $testResult = $baz->mergeBar();
@@ -159,6 +160,9 @@ rethinking of your architecture.
         $this->assertEquals(2, $foo->bar());
     }
 
+[TechEdit - This causes a fatal error since stdClass doesn't have a bar method,
+    better to use a Foo class or something else?]
+
 There are a number of values that we can use for expects():
 
 * *$this->any()* won't care how many times you run it, and the choice of lazy 
@@ -197,6 +201,8 @@ There is an option called $this->at(x) where x is an integer that starts at
 
         $this->assertEquals($expectedResults, $testResults);
     }
+
+[TechEdit - Same as above]
 
 You can also write tests where you can mock an object that will return
 different results based on specific inputs, using the *with()* method.
@@ -243,18 +249,21 @@ Here is a very contrived example:
         protected function _bar($environment)
         {
             if ($environment == 'dev') {
-                return 'CANDY BAR';
+                $this->_message = 'CANDY BAR';
             }
             
-            return "PROTECTED BAR";
+            $this->_message = "PROTECTED BAR";
         }
     }
+
+[TechEdit - Would you rather have this follow PSR where protected/Private
+    methods don't use the _ notation anymore?]
 
 To test it, we unleash the power of reflection.
 
 {: lang="php"}
     <?php
-    class FooTest extends PHPUnit_Framework_Testcase
+    class FooTest extends PHPUnit_Framework_TestCase
     {
         public function testProtectedBar()
         {
@@ -262,7 +271,7 @@ To test it, we unleash the power of reflection.
             $expectedMessage = 'PROTECTED BAR';
             $reflectedFoo = new ReflectionMethod($testFoo, '_bar');
             $reflectedFoo->setAccessible(true);
-            $reflectedFoo->invoke($testFoo);
+            $reflectedFoo->invoke($testFoo, 'production');
             $message = PHPUnit_Framework_Assert::readAttribute(
                 $testFoo, '_message'
             );
@@ -271,7 +280,7 @@ To test it, we unleash the power of reflection.
                 $expectedMessage,
                 $message,
                 'Did not get expected message'
-            )
+            );
         }
     }
 
@@ -344,7 +353,7 @@ that will give you a test double that uses the trait:
 
         public function get($key)
         {
-            if (!isset($this->_values[$key'])) {
+            if (!isset($this->_values[$key])) {
                 return false;
             }
 
