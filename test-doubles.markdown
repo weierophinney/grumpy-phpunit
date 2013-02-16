@@ -98,7 +98,7 @@ things if they don't need to be mocked!
         $bar = $this->getMockBuilder('Bar')->getMock();
         $bar->expects($this->any())
             ->method('getStatus')
-            ->will($this->returnValue('pending');
+            ->will($this->returnValue('pending'));
         
         $baz = new Baz($foo, $bar);
         $testResult = $baz->mergeBar();
