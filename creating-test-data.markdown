@@ -73,7 +73,7 @@ When you're ready to use it in your test:
 
     $this->assertTrue(
         count($collection) > 8,
-        "Did not have at least 8 widgets in our collection
+        "Did not have at least 8 widgets in our collection"
     );
     $this->assertEquals(
         $expectedCount,
