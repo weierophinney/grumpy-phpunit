@@ -53,3 +53,6 @@ When this test gets run, it will expect that in the course of executing
 your code an exception of the type FooException will be thrown.
 
 
+[TechEdit - Not really sure I like this example code, as it doesn't make
+    any sense why censorCheck() throws an exception if it finds a bad
+    word, or why you return true when it doesn't find a bad word. ]
