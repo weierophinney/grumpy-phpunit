@@ -158,7 +158,7 @@ Using our sample app, here's one way to do it.
             return $this->createDefaultDBConnection($pdo, $dsn);
         }
 
-        public funciton getDataSet()
+        public function getDataSet()
         {
             // Load your dataset here
         }
