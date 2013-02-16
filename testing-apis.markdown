@@ -160,10 +160,10 @@ we expect.
     public function testCorrectlyFormatResponseFromApi()
     {
         // Sample JSON response from Gimmebar API
-        $apiResponse = <<EOT
+        $apiResponse = <<<EOT
         {
            "more_records": true,
-           "records":[
+           "records":[{
               "id":"506e217c29ca15dc58000025",
               "asset_type":"page",
               "content":{
@@ -185,19 +185,19 @@ we expect.
               "user_id":"b7703f2a12d4c7e1cc2f6999e593e3d0",
               "title":"Merrick Christensen - JavaScript Dependency Injection",
               "short_url":"http:\/\/gim.ie\/3PxM"
-             ],
+             }],
            "total_records": 1,
            "limit": 10,
            "skip": 0 
-        },
-        EOT; 
+        }
+EOT;
         
         $api = $this->getMockBuilder('\Grumpy\GimmebarApi')
             ->setMethods(array('grabPublicAssetsByUser'))
             ->getMock();
         $api->expects($this->once())
             ->method('grabPublicAssetsByUser')
-            ->will($this->returnValue($apiResponse);
+            ->will($this->returnValue(json_decode($apiResponse,true)));
 
         $apiWrapper = new \Grumpy\GimmebarWrapper($api);
         $testResponse = $apiWrapper->grabPublicAssetsByUser('chartjes');
