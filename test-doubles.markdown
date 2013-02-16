@@ -39,7 +39,7 @@ using some of the methods provided by the mocking API.
         {
             if ($this->bar->getStatus() == 'merge-ready') {
                 $this->bar->merge();
-                retun true;
+                return true;
             }
             
             return false; 
