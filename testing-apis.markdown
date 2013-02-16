@@ -33,6 +33,8 @@
         }
     }
 
+[TechEdit - Still use _ for protected member names or take it out?]
+
 If there is one question I get over and over again from people seeking
 testing advice, it's "how can I test API calls". The only question
 that I get asked more is "why are you so grumpy all the time?"
