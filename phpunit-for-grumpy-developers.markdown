@@ -284,7 +284,7 @@ be run in it's own PHP process. This will mean your test suite will take a
 lot longer, so keep this in mind if you decide to do it.
 
 If you only have some tests that need to be isolated, it's a little bit
-tricker. First you need to do is add the annotation *@runInSeparateProcess*
+trickier. First you need to do is add the annotation *@runInSeparateProcess*
 to the docblock for your test that needs isolation. However, once you've
 set that value, it will be preserved for all following tests.
 
