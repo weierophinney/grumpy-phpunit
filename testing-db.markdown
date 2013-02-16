@@ -62,7 +62,7 @@ database. If you have some business logic for your application that exists
 only in an SQL query, then you probably will have to write a few tests
 that speak to the database directly.
 
-After all, I am on interested in testing to see if I can connect to my
+After all, I am only interested in testing to see if I can connect to my
 database properly. That sort of thing should be written into your application
 way before any business logic code gets run. Like in the bootstrap or the
 front controller of your framework-based code base.
