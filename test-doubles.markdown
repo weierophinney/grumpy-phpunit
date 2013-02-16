@@ -160,6 +160,9 @@ rethinking of your architecture.
         $this->assertEquals(2, $foo->bar());
     }
 
+[TechEdit - This causes a fatal error since stdClass doesn't have a bar method,
+    better to use a Foo class or something else?]
+
 There are a number of values that we can use for expects():
 
 * *$this->any()* won't care how many times you run it, and the choice of lazy 
