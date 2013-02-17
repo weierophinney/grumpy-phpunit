@@ -372,9 +372,9 @@ any other file format:
                 array('id' => 3, 'tig_name' => 'MAD#1', 'ibl_team' => 'MAD', 'comments' => 'Draft pick', 'status' => 0, 'item_type' => 0),
                 array('id' => 4, 'tig_name' => 'TOR Hartjes', 'ibl_team' => 'MAD', 'comments' => 'Test Writer', 'status' => 1, 'item_type' => 1)
             )
-        )
+        );
 
-        return Grumpy_DBUnit_ArrayDataSet($dataset)
+        return Grumpy_DBUnit_ArrayDataSet($dataset);
     }
 
 The only catch is that we have to implement our own dataset code...
