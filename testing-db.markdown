@@ -349,11 +349,11 @@ You can load that dataset this way:
 
 {: lang="php" }
     <?php
-    public funciton getDataSet()
+    public function getDataSet()
     {
         $dataset = new PHPUnit_Extensions_Database_DataSet_CsvDataSet();
         $dataset->addTable(
-            'rosters', dirname(__FILE__) . '/fixtures/roster-seed.csv');
+            'rosters', dirname(__FILE__) . '/fixtures/roster-seed.csv'
         );
     }
 
