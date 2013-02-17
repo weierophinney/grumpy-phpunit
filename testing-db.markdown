@@ -596,7 +596,7 @@ Now to add a method to our Roster class that uses SQL to give us the answer
         ";
         $stmt = $this->_db->prepare($sql);
         $stmt->execute(array($nickname));
-        $result = $stmt->fetchAll();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result['roster_count'];
     }
