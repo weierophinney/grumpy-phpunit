@@ -534,7 +534,7 @@ normally expect
         $expectedRoster,
         $testRoster,
         "Did not get expected roster when passing in known team nickname"
-    )
+    );
 }
 
 The rest of the test is the same, except we pass in our mocked PDO object
