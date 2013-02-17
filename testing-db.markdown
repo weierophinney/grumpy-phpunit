@@ -482,7 +482,7 @@ have to actually talk to the database any more.
         $databaseResultSet = array(
             array('tig_name' => 'AAA Foo'),
             array('tig_name' => 'BBB Bar'),
-            array('tig_name' => 'ZZZ Zazz));
+            array('tig_name' => 'ZZZ Zazz'));
     }
 
 First, create an example of what the database would give us back.
