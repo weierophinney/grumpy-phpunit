@@ -20,7 +20,7 @@
                 WHERE ibl_team = ?";
             $sth = $this->_db->prepare($sql);
             $sth->execute(array($nickname));
-            $rows = $sth->fetchAll();
+            $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
             
             if (!$rows) {
                 return array();
@@ -62,7 +62,7 @@ database. If you have some business logic for your application that exists
 only in an SQL query, then you probably will have to write a few tests
 that speak to the database directly.
 
-After all, I am on interested in testing to see if I can connect to my
+After all, I am only interested in testing to see if I can connect to my
 database properly. That sort of thing should be written into your application
 way before any business logic code gets run. Like in the bootstrap or the
 front controller of your framework-based code base.
@@ -96,7 +96,7 @@ A sample test that talks directly to the database:
             $this->_db = new PDO($dsn);
         }
 
-        public testReturnsRosterSummaryForKnownRoster()
+        public function testReturnsRosterSummaryForKnownRoster()
         {
             $roster = new \Grumpy\Roster($this->_db);
             $expectedRoster = array('AAA Foo', 'BBB Bar', 'ZZZ Zazz');
@@ -105,7 +105,7 @@ A sample test that talks directly to the database:
                 $expectedRoster,
                 $testRoster,
                 "Did not get expected roster when passing in known team nickname"
-            )
+            );
         }
     }
 
@@ -158,7 +158,7 @@ Using our sample app, here's one way to do it.
             return $this->createDefaultDBConnection($pdo, $dsn);
         }
 
-        public funciton getDataSet()
+        public function getDataSet()
         {
             // Load your dataset here
         }
@@ -349,11 +349,11 @@ You can load that dataset this way:
 
 {: lang="php" }
     <?php
-    public funciton getDataSet()
+    public function getDataSet()
     {
         $dataset = new PHPUnit_Extensions_Database_DataSet_CsvDataSet();
         $dataset->addTable(
-            'rosters', dirname(__FILE__) . '/fixtures/roster-seed.csv');
+            'rosters', dirname(__FILE__) . '/fixtures/roster-seed.csv'
         );
     }
 
@@ -372,9 +372,9 @@ any other file format:
                 array('id' => 3, 'tig_name' => 'MAD#1', 'ibl_team' => 'MAD', 'comments' => 'Draft pick', 'status' => 0, 'item_type' => 0),
                 array('id' => 4, 'tig_name' => 'TOR Hartjes', 'ibl_team' => 'MAD', 'comments' => 'Test Writer', 'status' => 1, 'item_type' => 1)
             )
-        )
+        );
 
-        return Grumpy_DBUnit_ArrayDataSet($dataset)
+        return Grumpy_DBUnit_ArrayDataSet($dataset);
     }
 
 The only catch is that we have to implement our own dataset code...
@@ -482,7 +482,7 @@ have to actually talk to the database any more.
         $databaseResultSet = array(
             array('tig_name' => 'AAA Foo'),
             array('tig_name' => 'BBB Bar'),
-            array('tig_name' => 'ZZZ Zazz));
+            array('tig_name' => 'ZZZ Zazz'));
     }
 
 First, create an example of what the database would give us back.
@@ -534,7 +534,7 @@ normally expect
         $expectedRoster,
         $testRoster,
         "Did not get expected roster when passing in known team nickname"
-    )
+    );
 }
 
 The rest of the test is the same, except we pass in our mocked PDO object
@@ -596,7 +596,7 @@ Now to add a method to our Roster class that uses SQL to give us the answer
         ";
         $stmt = $this->_db->prepare($sql);
         $stmt->execute(array($nickname));
-        $result = $stmt->fetchAll();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result['roster_count'];
     }
