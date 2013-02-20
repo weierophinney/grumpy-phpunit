@@ -1,3 +1,5 @@
+{mainmatter}
+
 # PHPUnit For Grumpy Developers
 PHPUnit can look intimidating to just get the skeleton of a test created due
 to the immense length of it's documentation and large number of configurable
