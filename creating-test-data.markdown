@@ -1,12 +1,11 @@
 # Creating Test Data
 If you are testing functionality that needs data to manipulate,
-you need to learn how to create realistic data for your
+you need to learn how to create and provide realistic data for your
 tests.
 
-Note the key here is "realistic". Even the best tests are
-of no use to you if they constantly rely on data that might
-be wildly different from the data that your code is using
-in production.
+Note the key word here is "realistic". Even the best tests are
+of no use to you if they consume data that is wildly different
+from the data your code uses in production.
 
 ## Data Source Snapshots
 If you are using PHPUnit to do integration tests, or
@@ -20,8 +19,8 @@ One of the easiest ways I know to get large amounts
 of data out of a data source easily is to use whatever
 CLI utilities are provided with it. The classic
 example is using *mysql_dump* to grab tables and
-then the MySQL CLI tool to import the data to
-your database associated with your tests.
+then the MySQL CLI tool to import the data into
+the database associated with your tests.
 
 Any tool that can automate the process of
 getting the raw data from one location to another
@@ -30,7 +29,7 @@ will be of use to you.
 ### Serialize And Store
 I have a personal preference for architectures where I speak to data
 sources and create data objects from the results. One benefit of
-this is that during testing I can create collections of objects
+this is that, during testing, I can create collections of objects
 by writing some PHP code and serializing the results to the
 file system for later retrieval.
 
@@ -83,14 +82,14 @@ When you're ready to use it in your test:
 
 ## Fake It When You Need To 
 
-Remember when I pointed out earlier in the chapter that it's good
+Remember I pointed out earlier in the chapter that it's good
 to have realistic testing data? When you write tests, it's very
-tempting to take short cuts. I have been
+tempting to take short cuts. For instance, I have been
 known to overuse such famous people as Testy McTesterton and
 Art Vandelay as test subjects.
 
 [Faker](https://github.com/fzaninotto/Faker) is a great tool for randomly
-generating data like names, addresses and phone numbers.
+generating data like names, addresses, and phone numbers.
 
 { lang: php }
     <?php
