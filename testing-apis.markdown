@@ -3,7 +3,7 @@
     <?php
     namespace Grumpy;
 
-    class Gimmebar 
+    class GimmebarApi
     {
         protected $_apiUrl;
 
@@ -37,10 +37,10 @@
 
 If there is one question I get over and over again from people seeking
 testing advice, it's "how can I test API calls". The only question
-that I get asked more is "why are you so grumpy all the time?"
+that I get asked more is "why are you so grumpy all the time?".
 
 Testing API calls is really no different than testing any other
-kind of code: you have a expected output, you execute some code
+kind of code: you have an expected output, you execute some code
 that calls the API, you verify your test returns the values
 that you are expecting.
 
@@ -54,7 +54,7 @@ Given our example code, it might look something like this:
     public function testCountPublicAssetsByKnownUser()
     {
         $apiUrl = 'https://gimmebar.com/api/v1';
-        $gimmebar = new \Grumpy\Gimmebar($apiUrl);
+        $gimmebar = new \Grumpy\GimmebarApi($apiUrl);
         $expectedResultCount = 86;
         $publicAssetCount = $gimmebar->getPublicAssetCountByUser('grumpycanuck');
         $this->assertEquals(
@@ -66,16 +66,16 @@ Given our example code, it might look something like this:
 
 This test is brittle because it relies on the API being available at the
 exact time we run the test. What happens if you can't actually reach this
-API from your testing environment? This becomes important if you are 
+API from your testing environment? This becomes important if you are
 rate-limited in your access.
 
-Also consider the situation where you access the API through one URL for your
+Also, consider the situation where you access the API through one URL for your
 development work but a different one for production. 
 
 ## Wrapping Your API Calls 
 I know this book is supposed to be about using PHPUnit, not about what your
 code is supposed to look like. Nonetheless I still think it's important to
-understand that the key to really being able to test APIs is by wrapping
+understand that the key to really being able to test APIs is wrapping
 code around how you access it.
 
 By this I mean that if you have a library that someone (maybe even you) wrote
@@ -94,7 +94,7 @@ First, let's refactor our API object:
     <?php
     namespace Grumpy;
 
-    class Gimmebar 
+    class GimmebarApi
     {
         protected $_apiUrl;
 
@@ -205,8 +205,8 @@ EOT;
     } 
 
 In this test case we are making sure that the Gimmebar wrapper is correctly
-handling a typical response that we from Gimmebar itself. Here's another 
-example of a test using a mock object
+handling a typical response we'd get from Gimmebar itself. Here's another
+example of a test using a mock object:
 
 {: lang="php" }
     <?php
@@ -233,9 +233,9 @@ example of a test using a mock object
  
 Just like any other test, we're still following the same logic: we create
 a scenario, mock out resources that are required for that scenario, and 
-then test our code to make sure that based on a known set of inputs
-that we are getting an expected output.
+then test our code to make sure that, based on a known set of inputs, we
+are getting an expected output.
 
 Pay attention to the fact that in order to test this particular bit of
 functionality, we don't even need a full response. Just a fake response
-containing the data only required is all it takes.
+containing only the data required is all it takes.
