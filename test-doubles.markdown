@@ -81,11 +81,11 @@ sure that we actually pass in objects of the correct type.
     }
 
 A totally contrived example to be sure, but why did we do the test this way?
-In our code under test we specifically are using type hinting so the code
+In our code under test we are specifically using type hinting, so the code
 is expecting to be given a dependency of a specific type.
 
 We don't need to completely mock out *$foo* because our test doesn't require
-a *Foo*  object to do anything. Remember, the goal when writing tests is to 
+a *Foo* object to do anything. Remember, the goal when writing tests is to
 also minimize the amount of testing code you need to write. Don't mock
 things if they don't need to be mocked!
 
@@ -121,7 +121,7 @@ trying to stub out the functionality of *getStatus()* to replace whatever it
 really wants to do.
 
 A word of warning: PHPUnit cannot mock protected or private class methods.
-To do that you need to use PHP's reflection API to create a copy of the
+To do that you need to use PHP's Reflection API to create a copy of the
 object you wish to test and set those methods to be publicly visible.
 
 I realize that from a code architecture point of view protected and 
@@ -165,7 +165,7 @@ rethinking of your architecture.
 
 There are a number of values that we can use for expects():
 
-* *$this->any()* won't care how many times you run it, and the choice of lazy 
+* *$this->any()* won't care how many times you run it, and is the choice of lazy
 programmers everywhere
 * *$this->never()* expects the method to never run
 * *$this->once()* expects, well, I think you can figure that one out
@@ -285,7 +285,7 @@ To test it, we unleash the power of reflection.
     }
 
 ### Testing Private And Protected Attributes
-Same sort of thing applied if we want to write any tests
+Same sort of thing applies if we want to write any tests
 where we are manipulating private or protected attributes.
 
 
@@ -326,15 +326,15 @@ Often you will want to test that a certain method in your code has been run
 a specific number of times. You can do that using the expect() method as
 part of your mock object. 
 
-In this code, we want to make sure that given a known number of 'deltas' that
-Beta::process() gets called the correct number of times. In this test example
+In this code, we want to make sure that, given a known number of 'deltas',
+Beta::process() gets called the correct number of times. In the above test example,
 the test case would fail if Beta::process is not run 3 times. 
 
 ## More Object Testing Tricks
 
 ### Testing Traits
 If you are using PHP 5.4 and want to compose objects using traits,
-you have two options. You can test object that use traits, and then
+you have two options. You can test objects that use traits, and then
 test the functionality that the traits add.
 
 If you are using PHPUnit 3.6 or newer, you can use a helper

@@ -47,7 +47,7 @@ if you are writing unit tests, you should never be speaking to the database.
 
 Why? Unit test suites are meant to be testing code, not the ability of
 a database server to return results. They also need to run quickly. If your 
-test suite takes a long time to run, nobody is going to bother doing it. Who 
+test suite takes a long time to run, nobody is going to bother running it. Who
 wants to wait 30 minutes for your entire test suite to run? I sure don't.
  
 If you are testing code that does complex database queries, guess what?
@@ -69,13 +69,13 @@ front controller of your framework-based code base.
 
 ## Sandboxes
 If you are going to write tests that connect to a database, then make sure
-that you create a sandbox that the database will live in. When I say
+you create a sandbox that the database will live in. When I say
 sandbox, I am referring to creating an environment where you can delete
 and recreate the database easily. Even better if you can automate doing it.
 
 So make sure that your application supports the ability to decide what
 database it will talk to. Set it in the bootstrap, or in your globally-available
-configuration object, or in the constructor of the god object every other object
+configuration object, or in the constructor of the God object every other object
 in your application extends itself from. I don't care, just make sure
 that you can tell your application what database to talk to.
 
@@ -118,7 +118,7 @@ that bear no resemblance to data that actually exists in production.
 Like with any kind of testing, you are looking to compare expected results
 to the output of your code, given a known set of inputs. The only way to
 really achieve this is to either have your testing process dump the existing
-database and recreate it from or use database fixtures.
+database and recreate it from scratch, or use database fixtures.
 
 In the PHPUnit world, I feel there is only one database-fixture-handling tool
 worth considering.
@@ -126,8 +126,8 @@ worth considering.
 ## DBUnit
 As I've said before, I am not a big fan of using database fixtures, instead
 preferring to write my code in such a way that I instead create objects
-to represent the data. Easier to mock, easier to test. But you are not 
-necessarily me. If you want to use a database in your tests, I recommend the 
+to represent the data. Easier to mock, easier to test. But you are not me.
+If you want to use a database in your tests, I recommend the
 use of [DBUnit](https://github.com/sebastianbergmann/dbunit).
 
 Check the web site for installation details. At the time of writing the
@@ -135,7 +135,7 @@ recommended method was via PEAR.
 
 There are times when you do need to talk to a database as part of a test,
 usually to verify that if you are saving some information to the database
-that you it is still there. Let's look at a way we can create a test that
+that it is still there. Let's look at a way we can create a test that
 involves speaking to the database.
 
 ### Setting things up for DBUnit
@@ -170,14 +170,14 @@ These two methods we've implemented make sure that any calls to a database
 being accessed via PDO will be intercepted by DBUnit.
 
 In case you are wondering, if you omit the getDataSet() method DBUnit will
-not truncate your data in the database and replace it the data in your
+not truncate your data in the database and replace it with the data in your
 fixture file. 
 
 Also, when creating your connection in the getConnection() method, make sure
 to use the same database credentials that your application is expecting.
 Otherwise DBUnit won't intercept calls to the database.
 
-### Using XML datasets
+### Using XML Datasets
 DBUnit supports several types of XML data fixtures. For my tests that
 do use them, I like to use "flat XML datasets".
 
@@ -196,7 +196,7 @@ Then you load it like this:
 
 {: lang="php" }
     <?php
-    public funciton getDataSet()
+    public function getDataSet()
     {
         return $this->createFlatXMLDataset(
             dirname(__FILE__) . '/fixtures/roster-seed.xml');
@@ -277,7 +277,7 @@ Let's say your have a dataset like this:
   
 {: lang="php" }
     <?php
-    public funciton getDataSet()
+    public function getDataSet()
     {
         $ds = $this->createFlatXmlDataSet(dirname(__FILE__) 
                 . '/fixtures/roster-seed.xml');
@@ -292,7 +292,7 @@ to the point where I would just be cut-and-pasting the section of the
 PHPUnit manual into the book. Not really what I had in mind.
 
 ### Using YAML datasets
-Don't like XML? You can always do up a data set in YAML
+Don't like XML? You can always do up a data set in YAML:
 
 {: lang="yaml" }
     rosters:
@@ -329,7 +329,7 @@ Then, to load that data set:
 
 {: lang="php" }
     <?php
-    public funciton getDataSet()
+    public function getDataSet()
     {
         return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(
             dirname(__FILE__) . '/fixtures/roster-seed.yml');
@@ -358,7 +358,7 @@ You can load that dataset this way:
     }
 
 ### Array-based datasets
-Sometimes you just want to hand out data as an array, and not mess with 
+Sometimes you just want to hand out data as an array, and not mess around with
 any other file format:
 
 {: lang="php" }
@@ -439,7 +439,7 @@ values a lot easier.
 
 ## Our first DBUnit test
 How would we write a test for a method that removes a player from a roster?
-Inside  Roster  we could add this method:
+Inside Roster we could add this method:
 
 {: lang="php" }
     <?php
@@ -472,11 +472,10 @@ table.
     }
 
 ## Mocking Database Connections
-So we have tests that are talking to the database directly and have shown
+So we have tests that are talking to the database directly and I have shown
 you how to use fixtures to create known data sets. It's time to move up
 to the pure unit test level and make use of mock objects so that we don't
 have to actually talk to the database any more.
-
 
 {: lang="php" }
     <?php
@@ -505,7 +504,7 @@ First, create an example of what the database would give us back.
 Next, create a mock object to represent the object that PDO would give us
 back when we run the prepare() method.
 
-My use of StdObject is okay here because for the purposes of this particular
+My use of StdObject is okay here for the purposes of this particular
 test. It doesn't really matter what type of object the mocked statement is
 because we are more interested in what is returned via those two methods.
 I've used this trick a few times when dealing with mocked objects that
@@ -526,7 +525,7 @@ statement object. Note the use of disableOriginalContructor(). This is needed
 because in this particular test I only care about returning the value from
 the prepare() method. By not executing the constructor, we don't have to
 worry at all about passing in a correctly-formatted DSN like PDO would
-normally expect
+normally expect.
 
 {: lang="php" } 
     <?php
@@ -549,7 +548,7 @@ fixtures? In my experience, mocks are the best way to handle things if
 you are manipulating the results you get back from the database.
 
 If your code is simply returning the results straight from the database,
-I think that unit testing that code is of little value. You are better off
+I think unit testing that code is of little value. You are better off
 investing the time writing functional tests that use fixtures or a database
 in a known state.
 
@@ -579,7 +578,7 @@ What should the test look like?
         );
     }
 
-Now to add a method to our Roster class that uses SQL to give us the answer
+Now to add a method to our Roster class that uses SQL to give us the answer:
 
 {: lang="php" }
     <?php

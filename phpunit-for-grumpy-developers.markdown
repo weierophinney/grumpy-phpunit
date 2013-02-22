@@ -1,35 +1,31 @@
 {mainmatter}
 
 # PHPUnit For Grumpy Developers
-PHPUnit can look intimidating to just get the skeleton of a test created due
+PHPUnit can look intimidating, even to just get the skeleton of a test created, due
 to the immense length of it's documentation and large number of configurable
-options.
+options. Don't be scared though, I am here to help!
 
-Don't be scared, I am here to help you! You can start with just a few of the
-basics and then move on to more complicated setups that include options for
+You can start with just a few of the basics before moving on to more complicated setups that include options for
 skipping certain types of tests or changing default settings.
 
 To be honest, the defaults will cover 99.999% of your testing needs.
 
 ## Installing And Configuring
-Installing PHPUnit and it's associated (sometimes optional) dependencies has
+Installing PHPUnit and its associated (sometimes optional) dependencies has
 gotten easier and easier with each passing day. As I write this book in the
 Canadian winter of 2012-2013, I have two preferred ways of installing PHPUnit that I
-would consider.
+would recommend.
 
 ### Installing via Composer
 [Composer](http://getcomposer.org/) is a command-line tool for tracking and
-installing dependencies for your application. It is my opinion that Composer
-is a tool that is providing a real transformation in the way PHP developers
-are building their PHP applications by making it easier to install dependencies
-and other people's libraries. With all the major frameworks supporting it, 
-there is no reason to not use it if you are using PHP 5.3 or greater.
+installing dependencies for your application. In my opinion, Composer
+is transforming the way PHP developers build their PHP applications, making it easier to install dependencies
+and external libraries. With all the major frameworks supporting it,
+there is no reason not to use it if you are running PHP 5.3 or greater.
 
-To install it using Composer, once you've installed Composer itself then
-you create a JSON file that tells Composer where you want it installed.
+To install PHPUnit using Composer, once you've installed Composer itself, create a JSON file (commonly named composer.json) that tells Composer where you want it installed.
 
-Here's a version so that it will install it globally for you in a specified
-directory.
+Here's an example that will install PHPUnit globally in the specified 'config' directory.
 
 {lang : json}
     {
@@ -44,12 +40,12 @@ directory.
     }   
 
 Composer will also try to pull in any required dependencies, but if for
-some reason they won't work you can just add them to composer.json.
+some reason they don't work, you can just add them to composer.json.
 
-If you wish to have PHPUnit as an actual dependency for your application, 
+If you prefer to have PHPUnit as an actual dependency for your application,
 you can create a much simplified version of that JSON file
 
-{lang: "json" 
+{lang: "json"}
     {
         "require-dev": {
             "phpunit/phpunit": "3.7.*"
@@ -59,12 +55,12 @@ you can create a much simplified version of that JSON file
 This will result in PHPUnit being available *inside* your project, in the
 vendor directory. 
 
-It's a tough call. On the one hand, you don't want to forcing people to
-install PHPUnit just to use your project. On the other hand it does ensure
-that you can update PHPUnit independent of any versions you already had
+It's a tough call. On the one hand, you don't want to force people to
+install PHPUnit just to use your project. On the other hand, it does ensure
+that you can update PHPUnit independent of any other versions you already had
 installed.
 
-### Installing Via PEAR
+### Installing via PEAR
 [Pear](http://pear.php.net) used to be my preferred method of installation
 before they made it available via Composer. In this case, installing things
 can be as simple as:
@@ -74,13 +70,13 @@ can be as simple as:
     path/to/pear install pear.phpunit.de/PHPUnit 
 
 By default PEAR will try to pull in additional dependencies for PHPUnit, 
-but you can install the additional missing components via PEAR as well.
+but you can manually install any additional missing components via PEAR as well.
 
 ### Which One Should I Use
-That depends on what additional dependencies you happen to be including. I 
-think that you should stick with one method, as mixing Composer and PEAR
+That depends on what additional dependencies you happen to be including. I definitely
+think you should choose one method and stick with it, however, as mixing Composer and PEAR
 might cause you to make mistakes and forget a package that you are likely
-to need. Composer installs dependencies locally by default while PEAR
+to need. Its worth noting that Composer installs dependencies locally by default while PEAR
 does global installs.
 
 In any case, consult the documentation for PHPUnit to see all the dependencies
@@ -118,10 +114,10 @@ with it's counterpart assertFalse(). These shortcuts do not change the fact
 that they all follow the same pattern.
 
 For more details on all the assertions that are available to you, check
-the [lateset documentation](http://www.phpunit.de/manual/3.7/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.assertions).
+the [latest documentation](http://www.phpunit.de/manual/3.7/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.assertions).
 
 ## Making Your Tests Tell You What's Failed
-A friend of mine related a story to me about an experience he had with a 
+A friend of mine related a story to me about an experience he had in a
 team he was working with:
 
 > Today I was called in as the unit tests stopped somewhere in the beginning 
@@ -131,7 +127,7 @@ team he was working with:
 > the fatal error
 
 Now, I mentioned that all these assertions take, as their final argument, an 
-optional message to be displayed if the test fails. I cannot highly recommend
+optional message to be displayed if the test fails. I cannot recommend highly
 enough that you make that message mandatory when you write your own tests. A
 descriptive message will go a long way towards helping you figure out exactly
 which test failed, hopefully telling you why.
@@ -146,15 +142,15 @@ go into overdraft unless allowed". But be careful: if you have tests that have
 the same name but you append an integer to the end, TestDox does not know
 that the two are different.
 
-My advice: stick to using the optional message argument but TestDox is a 
+My advice: stick to using the optional message argument, but TestDox is a
 great option if your tests haven't been following my advice. At least you
 will know what test in particular is reporting failures.
 
 ## Configuring Run Time Options
-If you run the 'phpunit --help' from the command line, you will see a
+If you run 'phpunit --help' from the command line, you will see a
 ridiculous number of options that are available to you. Some of them are
 useful, others seem to be in there because the author was looking for
-compatibility with existing tools. Here are the ones that I have found
+compatibility with existing tools. Here are the ones that I have found most
 useful:
 
 ### Logging Options
@@ -162,11 +158,11 @@ If you are using PHPUnit in conjunction with a continuous integration
 solution like [Jenkins-CI](http://www.jenkins-ci.org) then you should use 
 the *--log-junit optional/path/to/file* switch. 
 
-By spitting out logs in JUnit's XML format you make it easier for plugins
-for Jenkins to grab that data and do something useful with it.
+By spitting out logs in JUnit's XML format you make it easier for Jenkins plugins
+to grab that data and do something useful with it.
 
 ### Code Coverage Options
-Code coverage reports are a tool that you can use to figure out how much
+Code coverage reports are a tool you can use to figure out how much
 of your code is being executed by your tests. This value is normally
 expressed as a percentage as in "I have 60% code coverage for my application...
 why is Chris glaring at me like that?"
@@ -174,16 +170,16 @@ why is Chris glaring at me like that?"
 You also can get what is known as the Change Risk Analysis and Predictions
 metric for your code. The CRAP score (I cannot think of a more appropriate
 acronym) is an indication of how complex it is. The higher the CRAP score,
-the more complicated it is.
+the more complicated your code is.
 
 In order to generate a code coverage report, you need to have 
 [the PHP CodeCoverage component](http://github.com/sebastianbergmann/php-code-coverage)
 and [XDebug](http://xdebug.org) installed. 
 
-There are two you need to consider.
+There are two you need to consider:
 
 Use *--coverage-clover optional/path/to/file* for generating Clover-formatted
-reports that can be read by Jenkin's code coverage plugins. 
+reports that can be read by Jenkins code coverage plugins.
 
 Clover-formatted reports can be used to examine trends over time in terms of
 code coverage and lines of code added. Extremely useful if you are trying to
@@ -195,21 +191,21 @@ can view in your browser to see code coverage results.
 
 ### Managing Global State 
 Many PHP applications make use of singletons that have static method calls,
-or rely on globals and super-globals (like $_SESSION or $_POST). While there
+or rely on globals and super-globals (like $_SESSION or $_POST, etc). While there
 are legitimate reasons from an architectural standpoint to use static
 methods, they are kryptonite when it comes to testing. Static classes, 
 attributes, and variables are also considered part of the global state.
 
 The problem? You often have no control over when and to what values these
 things can be set. PHPUnit offers you a few ways to handle this. First, 
-by default PHPUnit tries to run your tests in such a way that it isolates
+by default, PHPUnit tries to run your tests in such a way that it isolates
 any changes made to global items, so you are somewhat covered there.
 
 If you are using PHP 5.3 or greater, PHPUnit will give you the option to
 also backup and restore static attributes of user defined classes. Again,
 a good practice to allow for isolated tests.
 
-My advice to you is to avoid statics as much as possible. The backup-and-restore
+My advice to you is avoid statics as much as possible. The backup-and-restore
 mechanism will increase memory usage and test execution time, and statics
 are all about trying to impose immutability in a language that likes everything
 to be dynamic.
@@ -233,9 +229,9 @@ for individual test cases, consuming more memory, and taking longer to
 execute.
 
 ## Test Environment Configuration
-It will quickly get tedious if you are going to be always manually adding
+It will quickly get tedious if you have to keep manually adding
 command-line switches when running your tests. By default, PHPUnit will look
-for a file called *phpunit.xml* whenever it runs and then look at the
+for a file called *phpunit.xml* whenever it runs and will then look at the
 values inside it.
 
 There are times when you will need different configuration files to run
@@ -271,10 +267,10 @@ code that resides in the same scope.
 
 This can sometimes be a problem when running tests because you don't
 want state leaking from one test to another. Things could get unpredictable
-if you modify an object in one test and then a subsequent test is
-expecting that object to be unmodified.
+if you modify an object in one test when a subsequent test expects that object
+to be unmodified.
 
-More commonly I have seen process isolation in PHPUnit used while
+More commonly I have seen process isolation used in PHPUnit when
 running integration tests. Why? Integration tests usually consist of
 manipulating real objects, not test doubles, so you must pay close
 attention to their state.
@@ -282,12 +278,12 @@ attention to their state.
 To insist on process isolation for all your tests, it's as simple as passing
 *--process-isolation* as a CLI option, or setting *processIsolation="true"* in
 your XML configuration file. This means, by default, every single test will
-be run in it's own PHP process. This will mean your test suite will take a
-lot longer, so keep this in mind if you decide to do it.
+be run in it's own PHP process. This means your test suite will take a
+lot longer to run, so keep this in mind if you decide to do it.
 
 If you only have some tests that need to be isolated, it's a little bit
-trickier. First you need to do is add the annotation *@runInSeparateProcess*
-to the docblock for your test that needs isolation. However, once you've
+trickier. First, you need to add the annotation *@runInSeparateProcess*
+to the docblock for your test that needs isolation. However, be aware that once you've
 set that value, it will be preserved for all following tests.
 
 To fix this, you would need to override the *run()* method in *PHPUnit_Framework_TestCase*
@@ -357,10 +353,10 @@ a file that mirrors the structure we used above.
         </testsuites>
     </phpunit>
 
-If you are working as part of a team that is practicing some sort of agile
-development practice, I find the use of the XML file to be a good one. It
-prevents you from allowing tests to be run that might be depending on code
-fixes which themselves have not been distributed to the rest of the team.
+If you are working as part of a team that uses some sort of agile
+development practice, I find the use of an XML file to be a good option. It
+allows you the flexibility to prevent tests being run that might depend on code
+fixes which have not yet been distributed to the rest of the team.
 
 ### Multiple Test Suites
 One of the things that you will find if you start writing a large number
@@ -391,7 +387,7 @@ So how do we do this? First, you'd define your test suites:
         </testsuites>
     </phpunit>
 
-Let's say you want to only run the "staging" test suite. You would  tell 
+Let's say you want to only run the "staging" test suite. You would tell
 PHPUnit via the CLI runner to do that like this: 
 
 { lang: text}

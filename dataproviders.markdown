@@ -21,7 +21,7 @@ in your tests. Here's an example of a situation where this can happen.
 
 Most programmers are familiar with the [FizzBuzz](http://en.wikipedia.org/wiki/FizzBuzz)
 problem, if only because it is commonly presented as a problem to be solved
-as part of an interview. In my opinion it is a good problem to ask about
+as part of an interview. In my opinion it is a good problem to present
 because it touches on a lot of really elementary basics of programming.
 
 ## Look at all those tests
@@ -69,18 +69,18 @@ If you didn't know about data providers, what might your tests look like?
         }
     }
 
-I'm sure you can already see the pattern:
+I'm sure you can see the pattern:
 
 * multiple input values
-* tests that are extremely similar in setup and exeuction
-* same set of assertions being used.
+* tests that are extremely similar in setup and execution
+* same assertion being used over and over
 
 ## Creating data providers
 
 A data provider is another method inside your test class that returns an
 array of results, with each result set being an array itself. Through
-some magic internal work, PHPUnit converts the result set you are returning
-into parameters which your test method needs to accept.
+some magic internal work, PHPUnit converts the returned result set into parameters
+which your test method signature needs to accept.
 
 {: lang="php" }
     <?php
@@ -96,7 +96,7 @@ into parameters which your test method needs to accept.
 
 The function name for the provider doesn't matter, but use some common
 sense when naming them as you might be stumped when a test fails and
-tells you about a data provider called 'ex1ch2' or something else.
+tells you about a data provider called 'ex1ch2', or something else equally meaningless.
 
 To use the data provider, we have to add an annotation to the docblock
 preceding our test so that PHPUnit knows to use it. Give it the name of
@@ -115,16 +115,16 @@ the data provider method.
         $this->assertEquals($expected, $response);
     }
 
-Now we have just one test (less code to maintain) and add scenarios to our
-heart's content via the provider (even better) and have also learned the
+Now we have just one test (less code to maintain) and can add scenarios to our
+heart's content via the data provider (even better). We have also learned the
 skill of applying some critical analysis to the testing code we are writing
-to make sure we are only writing the tests that we need.
+to make sure we are only writing the tests that we actually need.
 
 ## More complex examples
 
 Don't feel like you can only have really simple data providers. All you need
 to do is return an array of arrays, with each result set matching the
-parameters that your testing method is expecting. Here's an example
+parameters that your testing method is expecting. Here's a more complex example:
 
 {: lang="php" }
     <?php
