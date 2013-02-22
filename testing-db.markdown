@@ -379,6 +379,9 @@ any other file format:
 
 The only catch is that we have to implement our own dataset code...
 
+@TODO -- fix this as it does not work this way in the latest version of
+PHPUnit
+
 {: lang="php" }
     <?php
     require_once 'PHPUnit/Util/Filter.php';
