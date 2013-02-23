@@ -1,3 +1,5 @@
+foreward.markdown
+acknowledgements.markdown
 introduction.markdown
 phpunit-for-grumpy-developers.markdown
 test-doubles.markdown
