@@ -1,4 +1,4 @@
-foreward.markdown
+foreword.markdown
 acknowledgements.markdown
 introduction.markdown
 phpunit-for-grumpy-developers.markdown
