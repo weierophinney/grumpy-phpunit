@@ -108,9 +108,9 @@ All the built-in assertions that PHPUnit provides follow the same pattern:
 * an optional message to be displayed when the test fails
 
 I can already tell that you are thinking "he's lying about the pattern because
-it says 'assertTrue'. In a way you are right. PHPUnit does provide some
+it says 'assertTrue.'" In a way, you are right. PHPUnit does provide some
 shortcuts to perform certain assertions. assertTrue() is one of them, along
-with it's counterpart assertFalse(). These shortcuts do not change the fact
+with its counterpart assertFalse(). These shortcuts do not change the fact
 that they all follow the same pattern.
 
 For more details on all the assertions that are available to you, check
