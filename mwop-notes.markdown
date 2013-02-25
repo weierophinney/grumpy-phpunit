@@ -26,3 +26,11 @@ installing or updating. This is great when simply consuming a library/project,
 as you can omit development-only dependencies. If they _do_ want to run tests,
 however, they can be certain they're getting a version of PHPUnit that works for
 the tests, and that it's installed.
+
+minimal viable test class
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+*Why* do you feel creating a custom base class leads to "Inception levels of
+class construction"? I've had very real use cases for doing this in the past,
+and it would be very useful to hear your opinions on why it's a bad practice (or
+why not).
