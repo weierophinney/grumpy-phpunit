@@ -34,3 +34,17 @@ minimal viable test class
 class construction"? I've had very real use cases for doing this in the past,
 and it would be very useful to hear your opinions on why it's a bad practice (or
 why not).
+
+making your tests tell you what's failed
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+I'm not sure why you're talking about testdox here, to be honest. *When a failure
+or error occurs, PHPUnit already reports the method name, as well as the line
+number of the test class that raised the error or failure.* Testdox simply gives
+you a "readable" way of seeing those method names, as well as indicating inline
+the status of that particular test.
+
+Instead of talking about testdox here, I'd recommend using the `--verbose` flag
+with PHPUnit; its stated purpose is to give information on what tests were
+marked incomplete or were skipped -- which would give the information necessary
+to go back and investigate if need be.
