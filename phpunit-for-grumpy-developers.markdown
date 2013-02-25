@@ -2,7 +2,7 @@
 
 # PHPUnit For Grumpy Developers
 PHPUnit can look intimidating, even to just get the skeleton of a test created, due
-to the immense length of it's documentation and large number of configurable
+to the immense length of its documentation and large number of configurable
 options. Don't be scared though, I am here to help!
 
 You can start with just a few of the basics before moving on to more complicated setups that include options for
