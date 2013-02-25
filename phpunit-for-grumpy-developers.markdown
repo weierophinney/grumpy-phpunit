@@ -137,7 +137,7 @@ argument. You could use PHPUnit's [TestDox](http://www.phpunit.de/manual/3.7/en/
 functionality. What it does is turn the name of your test methods into easily-read
 strings. 
 
-It could turn testBankBalanceCannotGoIntoOverdraftUnlessAllowed into "Bank balance cannot
+It will turn the test method name "testBankBalanceCannotGoIntoOverdraftUnlessAllowed" into "Bank balance cannot
 go into overdraft unless allowed". But be careful: if you have tests that have
 the same name but you append an integer to the end, TestDox does not know
 that the two are different.
