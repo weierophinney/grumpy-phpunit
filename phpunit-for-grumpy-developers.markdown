@@ -176,13 +176,14 @@ In order to generate a code coverage report, you need to have
 [the PHP CodeCoverage component](http://github.com/sebastianbergmann/php-code-coverage)
 and [XDebug](http://xdebug.org) installed. 
 
-There are two you need to consider:
+There are two additional options you need to consider when generating code
+coverage:
 
 Use *--coverage-clover optional/path/to/file* for generating Clover-formatted
 reports that can be read by Jenkins code coverage plugins.
 
 Clover-formatted reports can be used to examine trends over time in terms of
-code coverage and lines of code added. Extremely useful if you are trying to
+code coverage and lines of code added. These are extremely useful if you are trying to
 make sure developers are living up to their promises of writing tests with
 maximum code coverage.
 
