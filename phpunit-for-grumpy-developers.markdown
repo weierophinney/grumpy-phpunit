@@ -100,7 +100,7 @@ this one, and then all their test cases extend from it. Sounds like we are
 getting to [Inception](http://en.wikipedia.org/wiki/Inception) levels of
 class construction. 
 
-All the built in assertions that PHPUnit provides follow the same pattern:
+All the built-in assertions that PHPUnit provides follow the same pattern:
 
 * a type of assertion
 * an expected value
