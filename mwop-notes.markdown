@@ -54,3 +54,20 @@ configuring run time options
 
 I'd suggest marking the options also as code (in addition to being bold); makes
 it more clear that these are something you'll type.
+
+*logging options*
+
+It's a bit wierd to talk about logging for Jenkins without indicating what CI
+is, why you'd have it setup, etc. It might be nice to have an appendix about CI
+options, why you'd use them, etc., and link to that from this section.
+
+Also, this might be a better place to talk about testdox, as it's really more of
+a logging format anyways.
+
+*code coverage options*
+
+An additional point to make about code coverage reports is that you can use them
+to identify areas of your code that are not yet tested. This can be useful
+during code review, as you can get a feel of what edge cases may still exist, or
+when adding features/fixing bugs, where somebody skimped in the past, and thus
+unknown expectations may exist.
