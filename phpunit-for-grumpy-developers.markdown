@@ -76,8 +76,8 @@ but you can manually install any additional missing components via PEAR as well.
 That depends on what additional dependencies you happen to be including. I definitely
 think you should choose one method and stick with it, however, as mixing Composer and PEAR
 might cause you to make mistakes and forget a package that you are likely
-to need. Its worth noting that Composer installs dependencies locally by default while PEAR
-does global installs.
+to need. It's worth noting that Composer installs dependencies locally by default while PEAR
+installs globally by default.
 
 In any case, consult the documentation for PHPUnit to see all the dependencies
 and add-ons that are available.
