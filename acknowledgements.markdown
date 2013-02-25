@@ -10,7 +10,7 @@ to thank the following people:
 
 Finally, none of this would be possible without the incredibly high
 tolerance level of my wife, Claire.  Owner of the best Twitter handle
-ever in @internet_widow, she has learned over the years when it
+ever in @internet\_widow, she has learned over the years when it
 is best to just nod and smile when I start going on and on about
 something I am passionate about.
 
