@@ -7,6 +7,12 @@ General
 I've been doing a commit per change in this branch; see the commit messages to
 understand the change I made.
 
+Formatting
+^^^^^^^^^^
+
+I'd recommend marking class names, method names, etc. within text as code, using
+the backtick markers (e.g., "`PHPUnit_Framework_TestCase`"). 
+
 phpunit-for-grumpy-developers.markdown
 --------------------------------------
 
