@@ -48,3 +48,9 @@ Instead of talking about testdox here, I'd recommend using the `--verbose` flag
 with PHPUnit; its stated purpose is to give information on what tests were
 marked incomplete or were skipped -- which would give the information necessary
 to go back and investigate if need be.
+
+configuring run time options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+I'd suggest marking the options also as code (in addition to being bold); makes
+it more clear that these are something you'll type.
