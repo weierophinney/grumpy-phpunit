@@ -296,7 +296,7 @@ to the point where I would just be cut-and-pasting the section of the
 PHPUnit manual into the book. Not really what I had in mind.
 
 ### Using YAML datasets
-Don't like XML? You can always do up a data set in YAML:
+Don't like XML? You can always provide datasets in YAML:
 
 {: lang="yaml" }
     rosters:
