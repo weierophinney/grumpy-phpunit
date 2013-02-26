@@ -167,3 +167,14 @@ You should:
 - indicate that you can have multiple test suites defined (which is implied
   anyways, but will also lead into the next section better).
 
+multiple test suites
+^^^^^^^^^^^^^^^^^^^^
+
+Demonstrate running _both_  test suites, and potentially even show some dummy
+output; this will make it more clear that different sets of tests are being run.
+
+Also, in the example from the previous section, you show building a test suite
+with multiple individual files -- but now show it using directories. I think a
+more comprehensive explanation of what configuration is allowed in a test suite,
+and what the implications of each configuration style is, would be really nice
+here.
