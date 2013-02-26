@@ -121,7 +121,7 @@ really achieve this is to either have your testing process dump the existing
 database and recreate it from scratch, or use database fixtures.
 
 In the PHPUnit world, I feel there is only one database-fixture-handling tool
-worth considering.
+worth considering: DBUnit.
  
 ## DBUnit
 As I've said before, I am not a big fan of using database fixtures, instead
