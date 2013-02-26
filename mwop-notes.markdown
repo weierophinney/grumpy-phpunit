@@ -387,3 +387,9 @@ general notes
 ^^^^^^^^^^^^^
 
 As noted elsewhere: personal preference is not to prefix non-public members.
+
+testing talking to the api itself
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+2d paragraph: it's brittle not just because the API needs to be available, but
+because you need to be certain the API will return what you expect.
