@@ -108,3 +108,38 @@ Introduce this section:
     respectively:
 
 Also, link to Appendix C of the PHPUnit documentation; don't just mention it.
+
+process isolation
+^^^^^^^^^^^^^^^^^
+
+3rd paragraph, beginning with "More commonly": I'd rephrase this, as I was
+confused -- were you saying you were seeing it more commonly? or that the
+practice is "more commonly" seen when doing integration tests? I think it's the
+latter, in which case I'd rewrite to something like:
+
+    Process isolation smoothes over these problems, as it allows tests to run in
+    their own requests. This is particularly interesting when writing
+    integration tests, where you will manipulate real objects, not test doubles,
+    and state therefor becomes an important consideration.
+
+4th paragraph, beginning "To insist on" -- that's an odd phrasing. I'd use "To
+enforce process isolation".
+
+5th and 6th paragraphs: clarification: `@runInSeparateProcess` at the
+_class_-level docblock will force test isolation for all tests in that class.
+However, if you put it as a _method_-level annotation, it only affects that
+specific test method. (This is different than your claim that its placement
+affects "all following tests" -- it depends on the context of the docblock.)
+
+I think you also need to better explain the "global state" hack and why it's
+needed. Basically, if you _are_ doing test isolation, you lose global state
+between test runs, requiring the hack.
+
+7th paragraph -- you're now confusing readers -- in the example, you set
+`preserveGlobalState` to `true`, but now you advocate `false` -- explain.
+
+8th and last paragraphs: give an explicit example of this. While I understand
+what you're getting at, I don't think you can assume that your readers are as
+familiar with `phpunit.xml` and its different settings. Demonstrate _both_ files
+-- both the one for tests that should run in isolation, and the one for those
+that should not -- so that readers can have a full example.
