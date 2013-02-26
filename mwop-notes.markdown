@@ -388,6 +388,9 @@ general notes
 
 As noted elsewhere: personal preference is not to prefix non-public members.
 
+I'd likely also link to other resources, as this is a topic for which there are
+many, many approaches. You know, like the PHP QA book. :)
+
 testing talking to the api itself
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
