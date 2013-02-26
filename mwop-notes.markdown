@@ -247,6 +247,8 @@ clearly in play.
 
 If it's possible to create a sidebar or a "note", move the paragraphs on
 protected/private methods into that; right now, they simply interrupt the flow.
+(And since you have a section on this already, you could just omit these
+paragraphs entirely.)
 
 Paragraph beginning with "In my experience" should be the first paragraph of
 this section.
@@ -279,3 +281,26 @@ method, inside the `will()` method, to detail return values."
 Regarding the last paragraph: IIRC, `expects(once())` doesn't dictate order; you
 can have the various `expects(once())` calls in any order, and as long as each
 is called, the test will pass. You use `expects(at())` to dictate order.
+
+*testing protected and private methods of objects*
+*testing private and protected attributes*
+
+Personal preference: I wouldn't prefix non-public members with an underscore. It
+makes refactoring harder later.
+
+I'd also explain the toolchain a bit:
+
+- Use the ReflectionAPI to get a reflection method object
+- call `setAccessible(true)` on the reflection method object you're testing
+- call `invoke()` on the reflection method object with the arguments you want to
+  pass to it
+
+Next, when you want to do assertions against a protected attribute, you can use:
+
+    assertAttribute(Not)?(Count|Empty|GreaterThan|LessThan|Equals|Contains|Same|InstanceOf|InternalType)(Only|OrEqual)?($attribute, $object, $testValue, $message)
+
+These work even on non-public members, which is far simpler than using
+readAttribute() and doing an assertion. It also allows you to omit the "testing
+private and protected attributes" section -- or you can replace that section
+with a description of the methods available, and how you'd use them.
+
