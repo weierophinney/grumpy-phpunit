@@ -199,6 +199,8 @@ following structure:
 - Provide a piece of code you will use to demonstrate.
 - Discuss how you will use the test double strategy to solve it, including
   introducing any new PHPUnit concepts related to that strategy.
+  - For example, introduce the `getMockBuilder()->getMock()` chain with dummy
+    objects, the `expects()->method()->will()` chain with stubs, etc.
 - Show the full test solution.
 
 On skimming the sections, it's not immediately clear what each test double is
@@ -226,3 +228,29 @@ shuld not mock things if they don't need to be mocked -- but this is all done
 without having introduced the concept of mocking. Omit it. Simply reiterate what
 a dummy object is: a required dependency of the object or method under test, but
 which is never invoked in the test itself.
+
+test stubs
+^^^^^^^^^^
+
+While paragraph 2 is a nice explanation of what test stubs *are*, I'd rework the
+next 4 paragraphs to go through the "what" and "how" with more detail:
+
+- Tell the mock what we want to run (`method()`)
+- Tell it what to expect will be passed (IIRC, in the case of a stub, it's
+  `any()`, as we're mainly concerned with the return value, right?)
+  (`expects()`)
+- Tell it what to return when the method is called (`will()`)
+
+I'd also note that once you have an `expects()` method, you're implicitly
+declaring an assertion. If that method is never called, or not called with the
+arguments specified, the test will fail. This is an important note; I've seen
+people in code review clamor about a lack of assertions -- even though a mock is
+clearly in play.
+
+If it's possible to create a sidebar or a "note", move the paragraphs on
+protected/private methods into that; right now, they simply interrupt the flow.
+
+Paragraph beginning with "In my experience" should be the first paragraph of
+this section.
+
+Last paragraph is good, but maybe an illustration would be even better.
