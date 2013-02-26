@@ -422,3 +422,9 @@ data in the database, or that it will replace it? Basically, this paragraph
 needs a ton of clarification. I'd actually suggest not discussing it here, but
 in the next section.
 
+*using xml datasets*
+
+Last paragraph: instead of the "cut-and-pasting" verbiage, I'd:
+
+- indicate that you can mege datasets
+- link them to the relevant section of the manual
