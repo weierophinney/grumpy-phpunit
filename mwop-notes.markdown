@@ -412,3 +412,13 @@ dbunit
 I _think_ dbunit can be installed via composer now:
 
 - https://github.com/sebastianbergmann/dbunit/blob/master/composer.json
+
+*setting things up for dbunit*
+
+2nd paragraph: "replace it with the data in your fixture file" -- you haven't
+introduced this concept yet. What is a fixture file? what does it have to do
+with DBUnit and how it operates? Are you saying DBUnit will not truncate the
+data in the database, or that it will replace it? Basically, this paragraph
+needs a ton of clarification. I'd actually suggest not discussing it here, but
+in the next section.
+
