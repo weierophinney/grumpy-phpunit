@@ -360,14 +360,18 @@ allows you the flexibility to prevent tests being run that might depend on code
 fixes which have not yet been distributed to the rest of the team.
 
 ### Multiple Test Suites
-One of the things that you will find if you start writing a large number
-of tests for your application: some of those tests might be flaky due to
-integration with 3rd party services you have not put wrappers around or
-shared testing database servers that can get overloaded. These things,
-while regrettable, are sometimes a reality for a resource-starved
+As you start writing a large number of tests for your application, you'll
+observe some common problems: 
+
+- some of your tests might be flaky due to integration with 3rd party services
+  you have not put wrappers around.
+- shared testing database servers can often get overloaded, leading to transient
+  test failures.
+  
+These things, while regrettable, are sometimes a reality for a resource-starved
 development team.
 
-Through the use of test suites you can create test plans
+Through the use of test suites, you can create test plans
 that you can choose to execute on an as-needed basis. To use the above
 analogy, you might only want to run the flaky tests during the final set
 of tests before a production push.
