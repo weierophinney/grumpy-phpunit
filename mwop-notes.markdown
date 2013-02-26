@@ -154,3 +154,16 @@ Explain _why_ you organize your tests this way. Maybe even detail other ways to
 organize tests (I've seen many advocate having your tests _with_ the code being
 tested, to keep it all in the same place; PHPUnit will still find only those
 classes that are test cases in that situation.)
+
+xml configuration
+^^^^^^^^^^^^^^^^^
+
+You should:
+
+- indicate that *you don't need to define test suites*; the default behavior of
+  PHPUnit is to run all test cases found.
+- indicate what a "test suite" is in terms of PHPUnit execution, and how you
+  would invoke a specific named test suite.
+- indicate that you can have multiple test suites defined (which is implied
+  anyways, but will also lead into the next section better).
+
