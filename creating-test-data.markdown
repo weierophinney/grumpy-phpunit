@@ -3,7 +3,7 @@ If you are testing functionality that needs data to manipulate,
 you need to learn how to create and provide realistic data for your
 tests.
 
-Note the key word here is "realistic". Even the best tests are
+Note the key word here is "realistic." Even the best tests are
 of no use to you if they consume data that is wildly different
 from the data your code uses in production.
 
