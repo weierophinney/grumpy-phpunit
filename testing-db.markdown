@@ -112,7 +112,7 @@ A sample test that talks directly to the database:
 The downside to writing tests that speak directly to a database is that you
 end up needing to constantly maintain a testing database. If you have a 
 testing environment where multiple developers share the same database, you
-run a real risk of over-writing test data or even ending up with data sets
+run a real risk of over-writing test data or even ending up with datasets
 that bear no resemblance to data that actually exists in production.
 
 Like with any kind of testing, you are looking to compare expected results
@@ -329,7 +329,7 @@ Don't like XML? You can always provide datasets in YAML:
         status: 1 
         item_type: 1 
 
-Then, to load that data set:
+Then, to load that dataset:
 
 {: lang="php" }
     <?php
@@ -477,7 +477,7 @@ table.
 
 ## Mocking Database Connections
 So we have tests that are talking to the database directly and I have shown
-you how to use fixtures to create known data sets. It's time to move up
+you how to use fixtures to create known datasets. It's time to move up
 to the pure unit test level and make use of mock objects so that we don't
 have to actually talk to the database any more.
 
