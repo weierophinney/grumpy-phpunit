@@ -396,3 +396,19 @@ testing talking to the api itself
 
 2d paragraph: it's brittle not just because the API needs to be available, but
 because you need to be certain the API will return what you expect.
+
+testing-db.markdown
+-------------------
+
+sandboxes
+^^^^^^^^^
+
+2d paragraph: you mention "God object" here for the first time. Not everyone
+knows what that means.
+
+dbunit
+^^^^^^
+
+I _think_ dbunit can be installed via composer now:
+
+- https://github.com/sebastianbergmann/dbunit/blob/master/composer.json
