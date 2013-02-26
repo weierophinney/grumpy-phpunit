@@ -187,3 +187,42 @@ This all then leads in to defining test doubles: a way to "fake" the
 dependencies that you inject into the subject under test, so that you can focus
 on testing the subject, not all of its interactions.
 
+general notes
+^^^^^^^^^^^^^
+
+For each of the sections on the individual test double types, I'd recommend the
+following structure:
+
+- Introductory text defining the problem that the given test double type
+  attempts to solve.
+- Attempt to define the test double type in a single, highlighted sentence.
+- Provide a piece of code you will use to demonstrate.
+- Discuss how you will use the test double strategy to solve it, including
+  introducing any new PHPUnit concepts related to that strategy.
+- Show the full test solution.
+
+On skimming the sections, it's not immediately clear what each test double is
+solving within the tests - it often looks like the same examples. Differentiate
+them more, so the readers learn what each strategy is, when to use it, and what
+tools are available to make it happen.
+
+dummy objects
+^^^^^^^^^^^^^
+
+This section starts out poorly. You start with a code sample, but there's no
+explanation of it or how it relates to the section title. Then, in the first
+paragraph of text, you talk generically of test doubles, and then mention that
+you can "just create a dummy object," without ever defining the term.
+
+2d and 3rd paragraphs: Don't get too complicated right off the bat. Omit the "we
+are only testing code that exercises one of those dependencies" bit -- just
+focus on the dummy object. We're testing an object that has a required
+constructor dependency, but we don't need that dependency to do anything. In the
+example, then, call a method that does not utilize that dependency, and do an
+assertion on that.
+
+Last paragraph: you talk about not needing to mock out all of `Foo`, and how you
+shuld not mock things if they don't need to be mocked -- but this is all done
+without having introduced the concept of mocking. Omit it. Simply reiterate what
+a dummy object is: a required dependency of the object or method under test, but
+which is never invoked in the test itself.
