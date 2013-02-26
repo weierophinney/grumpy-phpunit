@@ -73,7 +73,7 @@ when adding features/fixing bugs, where somebody skimped in the past, and thus
 unknown expectations may exist.
 
 test environment configuration
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "It will quickly get tedious" -- _what_ will quickly get tedious? Rephrase. I'd
 suggest: "You will find manually adding command-line switches quickly becomes
@@ -97,8 +97,7 @@ the first two paragraphs to read:
 The above introduces the concept more thoroughly, which should answer more
 questions out of the gate.
 
-command line switches
-^^^^^^^^^^^^^^^^^^^^^
+*command line switches*
 
 Introduce this section:
 
@@ -109,8 +108,7 @@ Introduce this section:
 
 Also, link to Appendix C of the PHPUnit documentation; don't just mention it.
 
-process isolation
-^^^^^^^^^^^^^^^^^
+*process isolation*
 
 3rd paragraph, beginning with "More commonly": I'd rephrase this, as I was
 confused -- were you saying you were seeing it more commonly? or that the
@@ -145,18 +143,16 @@ familiar with `phpunit.xml` and its different settings. Demonstrate _both_ files
 that should not -- so that readers can have a full example.
 
 organizing your tests
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
-file system
-^^^^^^^^^^^
+*file system*
 
 Explain _why_ you organize your tests this way. Maybe even detail other ways to
 organize tests (I've seen many advocate having your tests _with_ the code being
 tested, to keep it all in the same place; PHPUnit will still find only those
 classes that are test cases in that situation.)
 
-xml configuration
-^^^^^^^^^^^^^^^^^
+*xml configuration*
 
 You should:
 
@@ -167,8 +163,7 @@ You should:
 - indicate that you can have multiple test suites defined (which is implied
   anyways, but will also lead into the next section better).
 
-multiple test suites
-^^^^^^^^^^^^^^^^^^^^
+*multiple test suites*
 
 Demonstrate running _both_  test suites, and potentially even show some dummy
 output; this will make it more clear that different sets of tests are being run.
@@ -178,3 +173,17 @@ with multiple individual files -- but now show it using directories. I think a
 more comprehensive explanation of what configuration is allowed in a test suite,
 and what the implications of each configuration style is, would be really nice
 here.
+
+test-doubles.markdown
+---------------------
+
+I'd have more of an introduction here. Detail:
+
+- Basics of dependency injection
+- Why DI is an important aspect of testing (i.e., why it makes testing easier)
+- The new "problem" DI creates when testing
+
+This all then leads in to defining test doubles: a way to "fake" the
+dependencies that you inject into the subject under test, so that you can focus
+on testing the subject, not all of its interactions.
+
