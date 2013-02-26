@@ -208,6 +208,9 @@ solving within the tests - it often looks like the same examples. Differentiate
 them more, so the readers learn what each strategy is, when to use it, and what
 tools are available to make it happen.
 
+Also: *you did not write a section on test fakes!* Either omit it from the
+intro, or write a section on it. :)
+
 dummy objects
 ^^^^^^^^^^^^^
 
