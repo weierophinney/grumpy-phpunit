@@ -379,3 +379,11 @@ serialize and store
 Provide the Widget class declaration, so that readers can see why it can be
 serialized (i.e., there are no hidden dependencies, no dependencies on
 resources, etc.). This makes the concept cleaner.
+
+testing-apis.markdown
+---------------------
+
+general notes
+^^^^^^^^^^^^^
+
+As noted elsewhere: personal preference is not to prefix non-public members.
