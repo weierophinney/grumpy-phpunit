@@ -369,3 +369,13 @@ more complex examples
 
 Spot on. :) I've done similarly in tests I've written, calculating values ahead
 of time, even creating closures over variables.
+
+creating-test-data.markdown
+---------------------------
+
+serialize and store
+^^^^^^^^^^^^^^^^^^^
+
+Provide the Widget class declaration, so that readers can see why it can be
+serialized (i.e., there are no hidden dependencies, no dependencies on
+resources, etc.). This makes the concept cleaner.
