@@ -364,3 +364,8 @@ which makes debugging soooo much easier:
         'fizzbuzz' => array(15, 'FizzBuzz')
     );
 
+more complex examples
+^^^^^^^^^^^^^^^^^^^^^
+
+Spot on. :) I've done similarly in tests I've written, calculating values ahead
+of time, even creating closures over variables.
