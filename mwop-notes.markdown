@@ -339,3 +339,28 @@ Needs an introduction: what is a data provider?
 
 I'd define them, and then define the problem they solve, by merging the "why you
 should use data providers" and "look at all those tests" sections.
+
+creating data providers
+^^^^^^^^^^^^^^^^^^^^^^^
+
+First paragraph: actually, the data provider doesn't need to be a method inside
+the test class. It can come from a variety of sources: a file, static class
+method, function call, etc. You can then argue why you prefer methods within the
+class.
+
+I'd also detail what the structure is, and why -- why each element of the
+returned array has to be an array. Related, detail naming the arguments to the
+test method itself, so that there is a clear semantic relation between what is
+provided, and how the test method consumes it.
+
+Also, some information you didn't cover, which I've found immensely useful: if
+you return an associative array, the keys will be used to name the data sets,
+which makes debugging soooo much easier:
+
+    return array(
+        'one'      => array(1, '1'),
+        'fizz'     => array(3, 'Fizz'),
+        'buzz'     => array(5, 'Buzz'),
+        'fizzbuzz' => array(15, 'FizzBuzz')
+    );
+
