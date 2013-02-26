@@ -143,3 +143,14 @@ what you're getting at, I don't think you can assume that your readers are as
 familiar with `phpunit.xml` and its different settings. Demonstrate _both_ files
 -- both the one for tests that should run in isolation, and the one for those
 that should not -- so that readers can have a full example.
+
+organizing your tests
+---------------------
+
+file system
+^^^^^^^^^^^
+
+Explain _why_ you organize your tests this way. Maybe even detail other ways to
+organize tests (I've seen many advocate having your tests _with_ the code being
+tested, to keep it all in the same place; PHPUnit will still find only those
+classes that are test cases in that situation.)
