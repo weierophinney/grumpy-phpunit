@@ -340,7 +340,7 @@ Then, to load that data set:
     }
 
 ### Using CSV datasets
-Sure, it's possible:
+CSV (comma-separated value) datasets are also possible:
 
 {: lang="csv" }
     id;tig_name;ibl_team;comments;status;item_type
