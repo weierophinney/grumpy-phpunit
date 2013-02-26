@@ -304,3 +304,14 @@ readAttribute() and doing an assertion. It also allows you to omit the "testing
 private and protected attributes" section -- or you can replace that section
 with a description of the methods available, and how you'd use them.
 
+test spies
+^^^^^^^^^^
+
+This section needs more information. Detail how the approach is different than
+test stubs: you're not testing return values, only that you're called a set
+number of times; optionally, that you received specific values in a certain
+order (this would be where to introduce `at()`).
+
+Also, expand your definition of `expects()` here -- that it can also accept an
+integer indicating a specific number of times it should be executed.
+
