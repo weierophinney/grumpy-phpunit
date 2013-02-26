@@ -192,7 +192,7 @@ can view in your browser to see code coverage results.
 
 ### Managing Global State 
 Many PHP applications make use of singletons that have static method calls,
-or rely on globals and super-globals (like $_SESSION or $_POST, etc). While there
+or rely on globals and super-globals (such as $_SESSION or $_POST, etc). While there
 are legitimate reasons from an architectural standpoint to use static
 methods, they are kryptonite when it comes to testing. Static classes, 
 attributes, and variables are also considered part of the global state.
@@ -211,7 +211,7 @@ mechanism will increase memory usage and test execution time, and statics
 are all about trying to impose immutability in a language that likes everything
 to be dynamic.
 
-So, if you do need to use them, here are some tips:
+However, if you do need to use them, here are some tips:
 
 * *--no-globals-backup* will disable the default backup-and-restore $GLOBALS
 * *--static-backup* will backup and restore static attributes by default
