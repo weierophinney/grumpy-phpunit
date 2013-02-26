@@ -235,10 +235,8 @@ test stubs
 While paragraph 2 is a nice explanation of what test stubs *are*, I'd rework the
 next 4 paragraphs to go through the "what" and "how" with more detail:
 
+- Tell it how many times/when it will be invoked (`expects()`)
 - Tell the mock what we want to run (`method()`)
-- Tell it what to expect will be passed (IIRC, in the case of a stub, it's
-  `any()`, as we're mainly concerned with the return value, right?)
-  (`expects()`)
 - Tell it what to return when the method is called (`will()`)
 
 I'd also note that once you have an `expects()` method, you're implicitly
@@ -254,3 +252,15 @@ Paragraph beginning with "In my experience" should be the first paragraph of
 this section.
 
 Last paragraph is good, but maybe an illustration would be even better.
+
+*expectations during execution*
+
+The last paragraph is incredibly cryptic; and this is coming from somebody who
+has used `at()`. Detail it a bit more:
+
+- `at()` expects an integer indicating which sequential invocation of the method
+  it will respond to.
+- integers begin with 0
+- any `will()`, `method()`, and/or `with()` chained here will be associated with
+  that specific invocation.
+
