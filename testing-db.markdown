@@ -260,11 +260,11 @@ Loading that dataset is very similar:
             dirname(__FILE__) . '/fixtures/roster-seed.xml');
     }
 
-One of the drawbacks to using an XML dataset is that if you do have null
-values in your data, you have to put a placeholder in your dataset and
-then replace it with the desired null value.
+One of the drawbacks to using an XML dataset is that if you have null
+values in your data, you have to put placeholders in your dataset and
+then replace them with a null value.
 
-Let's say your have a dataset like this:
+As an example, the following dataset specifies null values as "###NULL###":
 
 {: lang="xml" }
    <?xml version="1.0" ?>
@@ -274,6 +274,10 @@ Let's say your have a dataset like this:
             <rosters id="3" tig_name="MAD#1" ibl_team="MAD" status="0" comments="###NULL###" item_type="0" />
             <rosters id="4" tig_name="TOR Hartjes" ibl_team="MAD" comments="Test writer" status="1" item_type="1" />
     </dataset> 
+
+In our test case's getDataSet() method, we use
+`PHPUnit_Extensions_Database_DataSet_ReplacementDataSet` to make substitutions.
+The following example replaces "###NULL###" with a `null` value.
   
 {: lang="php" }
     <?php
