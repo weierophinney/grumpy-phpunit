@@ -73,7 +73,7 @@ you create a sandbox that the database will live in. When I say
 sandbox, I am referring to creating an environment where you can delete
 and recreate the database easily; automating these tasks is even better.
 
-So make sure that your application supports the ability to decide what
+Make sure that your application supports the ability to decide what
 database it will talk to. Set it in the bootstrap, or in your globally-available
 configuration object, or in the constructor of the God object every other object
 in your application extends itself from. I don't care, just make sure
