@@ -428,3 +428,8 @@ Last paragraph: instead of the "cut-and-pasting" verbiage, I'd:
 
 - indicate that you can mege datasets
 - link them to the relevant section of the manual
+
+*array-based datasets*
+
+If this doesn't work, don't include it. If it does, make it available on github
+(and packagist!), and link to that from the text (while also displaying it).
