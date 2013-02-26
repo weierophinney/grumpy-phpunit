@@ -318,3 +318,16 @@ order (this would be where to introduce `at()`).
 Also, expand your definition of `expects()` here -- that it can also accept an
 integer indicating a specific number of times it should be executed.
 
+testing traits
+^^^^^^^^^^^^^^
+
+Cool section. :) 
+
+I'd maybe detail the problem a bit more.
+
+    Because Traits can be defined once, but used many times, you will not want
+    to necessarily test the functionality defined in traits in every object in
+    which they are consumed. At the same time, you _do_ want to test the traits
+    themselves. PHPUnit 3.6 and newer offers functionality for mocking traits
+    via the `getObjectForTrait()` method; this will return an object composing
+    the trait, so that you can unit test only the trait itself.
