@@ -264,3 +264,18 @@ has used `at()`. Detail it a bit more:
 - any `will()`, `method()`, and/or `with()` chained here will be associated with
   that specific invocation.
 
+Might be good to also note that if you call `once()`, it will look for the
+method to be executed once with precisely the aruments specified.
+
+*returning specific values based on input*
+
+I'd add some intro text in here, something along the lines of, "Often, the
+methods you invoke on dependencies accept arguments, and vary the return value
+based on what they receive. With PHPUnit, you can tell a mock object what to
+expect for arguments, and bind a specific return value for that input. To do
+this, you use the `with()` method to detail arguments, and the `returnValue()`
+method, inside the `will()` method, to detail return values."
+
+Regarding the last paragraph: IIRC, `expects(once())` doesn't dictate order; you
+can have the various `expects(once())` calls in any order, and as long as each
+is called, the test will pass. You use `expects(at())` to dictate order.
