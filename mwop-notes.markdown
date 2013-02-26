@@ -96,3 +96,15 @@ the first two paragraphs to read:
 
 The above introduces the concept more thoroughly, which should answer more
 questions out of the gate.
+
+command line switches
+^^^^^^^^^^^^^^^^^^^^^
+
+Introduce this section:
+
+    Command line switches may be specified in the configuration file as
+    attributes of the root `phpunit` element. The following provides
+    configuration for the `--backupGlobals` and `--processIsolation` switches,
+    respectively:
+
+Also, link to Appendix C of the PHPUnit documentation; don't just mention it.
