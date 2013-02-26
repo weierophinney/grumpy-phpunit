@@ -212,7 +212,8 @@ a known order.
 
 ### Mocking method calls with multiple parameters
 If you need to mock a method that accepts multiple parameters, you can
-specify that inside the with() method
+specify that inside the with() method; specify the arguments in the same order
+the method accepts them:
 
 {: lang="php"}
     <?php
