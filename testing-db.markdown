@@ -71,7 +71,7 @@ front controller of your framework-based code base.
 If you are going to write tests that connect to a database, then make sure
 you create a sandbox that the database will live in. When I say
 sandbox, I am referring to creating an environment where you can delete
-and recreate the database easily. Even better if you can automate doing it.
+and recreate the database easily; automating these tasks is even better.
 
 So make sure that your application supports the ability to decide what
 database it will talk to. Set it in the bootstrap, or in your globally-available
