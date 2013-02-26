@@ -433,3 +433,15 @@ Last paragraph: instead of the "cut-and-pasting" verbiage, I'd:
 
 If this doesn't work, don't include it. If it does, make it available on github
 (and packagist!), and link to that from the text (while also displaying it).
+
+our first dbunit test
+^^^^^^^^^^^^^^^^^^^^^
+
+I'd make a few notes for the readers:
+
+- The subject under test accepts a db adapter (technically a PDO connection) as
+  a dependency
+- The unit test then exercises the SUT's API, and does normal assertions
+
+This is what makes DBUnit so powerful -- it provides the infrastructure so that
+you can do your testing as if it were simply units, not integration.
