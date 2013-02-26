@@ -71,3 +71,28 @@ to identify areas of your code that are not yet tested. This can be useful
 during code review, as you can get a feel of what edge cases may still exist, or
 when adding features/fixing bugs, where somebody skimped in the past, and thus
 unknown expectations may exist.
+
+test environment configuration
+------------------------------
+
+"It will quickly get tedious" -- _what_ will quickly get tedious? Rephrase. I'd
+suggest: "You will find manually adding command-line switches quickly becomes
+tedious."
+
+Additionally, provide a transition before discussing `phpunit.xml`. I'd rephrase
+the first two paragraphs to read:
+
+    You will find manually adding command-line switches when running your tests
+    quickly becomes tedious. Fortunately, PHPUnit allows you to use a
+    configuration file for specifying the default switches, among other
+    settings. By default, PHPUnit will look for a file named either
+    `phpunit.xml` or `phpunit.xml.dist` in the directory in which you run it,
+    and use the values it contains to alter its own behavior. 
+
+    You may need different configuration for different kinds of tests -- e.g.,
+    unit tests vs. integration tests. PHPUnit allows you to indicate a specific
+    configuration file using the `--configuration` switch, with an argument
+    indicating the path of the configuration file.
+
+The above introduces the concept more thoroughly, which should answer more
+questions out of the gate.
