@@ -331,3 +331,11 @@ I'd maybe detail the problem a bit more.
     themselves. PHPUnit 3.6 and newer offers functionality for mocking traits
     via the `getObjectForTrait()` method; this will return an object composing
     the trait, so that you can unit test only the trait itself.
+
+dataproviders.markdown
+----------------------
+
+Needs an introduction: what is a data provider? 
+
+I'd define them, and then define the problem they solve, by merging the "why you
+should use data providers" and "look at all those tests" sections.
