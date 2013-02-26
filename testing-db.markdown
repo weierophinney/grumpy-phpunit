@@ -126,7 +126,7 @@ worth considering: DBUnit.
 ## DBUnit
 As I've said before, I am not a big fan of using database fixtures, instead
 preferring to write my code in such a way that I instead create objects
-to represent the data. Easier to mock, easier to test. But you are not me.
+to represent the data: Easier to mock, easier to test. But you are not me.
 If you want to use a database in your tests, I recommend the
 use of [DBUnit](https://github.com/sebastianbergmann/dbunit).
 
